@@ -59,6 +59,7 @@ import logging
 
 import six
 
+from openstack.anti_ddos import anti_ddos_service
 from openstack.auto_scaling import auto_scaling_service
 from openstack.bare_metal import bare_metal_service
 from openstack.block_store import block_store_service
@@ -103,6 +104,7 @@ class Profile(object):
         """
         self._services = {}
 
+        self._add_service(anti_ddos_service.AntiDDosService(version="v1"))
         self._add_service(alarm_service.AlarmService(version="v2"))
         self._add_service(bare_metal_service.BareMetalService(version="v1"))
         self._add_service(block_store_service.BlockStoreService(version="v2"))
