@@ -113,6 +113,7 @@ def from_config(cloud_name=None, cloud_config=None, options=None):
 
     # TODO(mordred) we need to add service_type setting to openstacksdk.
     # Some clouds have type overridden as well as name.
+
     services = [service.service_type for service in prof.get_services()]
     for service in cloud_config.get_services():
         if service in services:

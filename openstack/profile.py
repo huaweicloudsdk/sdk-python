@@ -66,6 +66,7 @@ from openstack.block_store import block_store_service
 from openstack.cloud_eye import cloud_eye_service
 from openstack.cluster import cluster_service
 from openstack.compute import compute_service
+from openstack.cts import cts_service
 from openstack.database import database_service
 from openstack.dns import dns_service
 from openstack import exceptions
@@ -112,6 +113,7 @@ class Profile(object):
         self._add_service(block_store_service.BlockStoreService(version="v2"))
         self._add_service(cluster_service.ClusterService(version="v1"))
         self._add_service(compute_service.ComputeService(version="v2"))
+        self._add_service(cts_service.CTSService(version="v1"))
         self._add_service(database_service.DatabaseService(version="v1"))
         self._add_service(identity_service.IdentityService(version="v3"))
         self._add_service(image_service.ImageService(version="v2"))
