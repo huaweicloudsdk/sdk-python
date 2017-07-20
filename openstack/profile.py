@@ -74,6 +74,7 @@ from openstack import exceptions
 from openstack.identity import identity_service
 from openstack.image import image_service
 from openstack.key_manager import key_manager_service
+from openstack.kms import kms_service
 from openstack.load_balancer import load_balancer_service as lb_service
 from openstack.maas import maas_service
 from openstack.map_reduce import map_reduce_service
@@ -120,6 +121,7 @@ class Profile(object):
         self._add_service(identity_service.IdentityService(version="v3"))
         self._add_service(image_service.ImageService(version="v2"))
         self._add_service(key_manager_service.KeyManagerService(version="v1"))
+        self._add_service(kms_service.KMSService(version="v1"))
         self._add_service(lb_service.LoadBalancerService(version="v1"))
         self._add_service(maas_service.MaaSService(version="v1"))
         self._add_service(message_service.MessageService(version="v1"))
