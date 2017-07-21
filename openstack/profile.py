@@ -83,6 +83,7 @@ from openstack import module_loader
 from openstack.network import network_service
 from openstack.object_store import object_store_service
 from openstack.orchestration import orchestration_service
+from openstack.rds import rds_service
 from openstack.smn import smn_service
 from openstack.telemetry.alarm import alarm_service
 from openstack.telemetry import telemetry_service
@@ -130,6 +131,7 @@ class Profile(object):
             object_store_service.ObjectStoreService(version="v1"))
         self._add_service(
             orchestration_service.OrchestrationService(version="v1"))
+        self._add_service(rds_service.RDSService(version="v1"))
         self._add_service(smn_service.SMNService(version="v2"))
         self._add_service(telemetry_service.TelemetryService(version="v2"))
         self._add_service(workflow_service.WorkflowService(version="v2"))
