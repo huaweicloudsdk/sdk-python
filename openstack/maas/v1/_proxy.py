@@ -38,7 +38,7 @@ class Proxy(proxy2.BaseProxy):
 
         :param dict kwargs: Keyword arguments which will be used to overwrite a
                             :class:`~openstack.maas.v1.agent.Agent`
-        ::rtype: :class:`~openstack.maas.v1.agent.Agent`
+        :rtype: :class:`~openstack.maas.v1.agent.Agent`
         """
         return self._create(_task.Task, **kwargs)
 
