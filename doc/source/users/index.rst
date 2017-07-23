@@ -47,6 +47,7 @@ approach, this is where you'll want to begin.
    CTS <guides/cts>
    DMS <guides/dms>
    KMS <guides/kms>
+   RDS <guides/rds>
 
 API Documentation
 -----------------
@@ -102,6 +103,7 @@ but listed below are the ones provided by this SDK by default.
    CTS <proxies/cts>
    DMS <proxies/dms>
    KMS <proxies/kms>
+   RDS <proxies/rds>
 
 Resource Interface
 ******************
@@ -138,6 +140,7 @@ The following services have exposed *Resource* classes.
    CTS <resources/cts/index>
    DMS <resources/dms/index>
    KMS <resources/kms/index>
+   RDS <resources/rds/index>
 
 Low-Level Classes
 *****************
