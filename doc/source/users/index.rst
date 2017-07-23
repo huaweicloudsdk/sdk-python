@@ -46,6 +46,7 @@ approach, this is where you'll want to begin.
    SMN <guides/smn>
    CTS <guides/cts>
    DMS <guides/dms>
+   KMS <guides/kms>
 
 API Documentation
 -----------------
@@ -100,6 +101,7 @@ but listed below are the ones provided by this SDK by default.
    SMN <proxies/smn>
    CTS <proxies/cts>
    DMS <proxies/dms>
+   KMS <proxies/kms>
 
 Resource Interface
 ******************
@@ -135,6 +137,7 @@ The following services have exposed *Resource* classes.
    SMN <resources/smn/index>
    CTS <resources/cts/index>
    DMS <resources/dms/index>
+   KMS <resources/kms/index>
 
 Low-Level Classes
 *****************
