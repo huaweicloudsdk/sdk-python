@@ -44,6 +44,7 @@ approach, this is where you'll want to begin.
    MAAS <guides/maas>
    Anti-DDos <guides/anti_ddos>
    SMN <guides/smn>
+   CTS <guides/cts>
 
 API Documentation
 -----------------
@@ -96,6 +97,7 @@ but listed below are the ones provided by this SDK by default.
    MAAS <proxies/maas>
    Anti-DDos <proxies/anti_ddos>
    SMN <proxies/smn>
+   CTS <proxies/cts>
 
 Resource Interface
 ******************
@@ -129,6 +131,7 @@ The following services have exposed *Resource* classes.
    MAAS <resources/maas/index>
    Anti-DDos <resources/anti_ddos/index>
    SMN <resources/smn/index>
+   CTS <resources/cts/index>
 
 Low-Level Classes
 *****************
