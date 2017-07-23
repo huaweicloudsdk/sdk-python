@@ -43,6 +43,8 @@ approach, this is where you'll want to begin.
    Telemetry <guides/telemetry>
    MAAS <guides/maas>
    Anti-DDos <guides/anti_ddos>
+   SMN <guides/smn>
+
 API Documentation
 -----------------
 
@@ -93,6 +95,7 @@ but listed below are the ones provided by this SDK by default.
    Workflow <proxies/workflow>
    MAAS <proxies/maas>
    Anti-DDos <proxies/anti_ddos>
+   SMN <proxies/smn>
 
 Resource Interface
 ******************
@@ -125,6 +128,7 @@ The following services have exposed *Resource* classes.
    Workflow <resources/workflow/index>
    MAAS <resources/maas/index>
    Anti-DDos <resources/anti_ddos/index>
+   SMN <resources/smn/index>
 
 Low-Level Classes
 *****************
