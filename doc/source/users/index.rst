@@ -48,6 +48,7 @@ approach, this is where you'll want to begin.
    DMS <guides/dms>
    KMS <guides/kms>
    RDS <guides/rds>
+   RDS_OS <guides/rds_os>
 
 API Documentation
 -----------------
@@ -104,6 +105,7 @@ but listed below are the ones provided by this SDK by default.
    DMS <proxies/dms>
    KMS <proxies/kms>
    RDS <proxies/rds>
+   RDS_OS <proxies/rds_os>
 
 Resource Interface
 ******************
@@ -141,6 +143,7 @@ The following services have exposed *Resource* classes.
    DMS <resources/dms/index>
    KMS <resources/kms/index>
    RDS <resources/rds/index>
+   RDS_OS <resources/rds_os/index>
 
 Low-Level Classes
 *****************
