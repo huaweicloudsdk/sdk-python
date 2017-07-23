@@ -45,6 +45,7 @@ approach, this is where you'll want to begin.
    Anti-DDos <guides/anti_ddos>
    SMN <guides/smn>
    CTS <guides/cts>
+   DMS <guides/dms>
 
 API Documentation
 -----------------
@@ -98,6 +99,7 @@ but listed below are the ones provided by this SDK by default.
    Anti-DDos <proxies/anti_ddos>
    SMN <proxies/smn>
    CTS <proxies/cts>
+   DMS <proxies/dms>
 
 Resource Interface
 ******************
@@ -132,6 +134,7 @@ The following services have exposed *Resource* classes.
    Anti-DDos <resources/anti_ddos/index>
    SMN <resources/smn/index>
    CTS <resources/cts/index>
+   DMS <resources/dms/index>
 
 Low-Level Classes
 *****************
