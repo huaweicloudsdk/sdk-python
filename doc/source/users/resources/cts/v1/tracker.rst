@@ -1,7 +1,7 @@
 openstack.cts.v1.tracker
 ========================
 
-.. automodule:: openstack.cts.v1.traker
+.. automodule:: openstack.cts.v1.tracker
 
 The Tracker Class
 -----------------
