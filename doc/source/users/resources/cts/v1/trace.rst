@@ -13,7 +13,7 @@ The ``Trace`` class inherits from
    :members:
 
 The TraceV2 Class
----------------
+-----------------
 
 The ``TraceV2`` class inherits from
     :class:`~openstack.cts.v1.ctsresource.Resource`.

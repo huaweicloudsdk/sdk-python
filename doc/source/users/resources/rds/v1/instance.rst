@@ -27,7 +27,7 @@ The InstanceErrorLog Class
 The ``InstancEerrorLog`` class inherits from
     :class:`~openstack.rds.v1.rdsresource.Resource`.
 
-.. autoclass:: openstack.rds.v1.instance.InstancEerrorLog
+.. autoclass:: openstack.rds.v1.instance.InstanceErrorLog
    :members:
 
 The InstanceSlowLog Class
