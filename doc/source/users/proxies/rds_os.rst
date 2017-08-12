@@ -6,7 +6,7 @@ For details on how to use rds_os, see :doc:`/users/guides/rds_os`
 .. automodule:: openstack.rds_os.v1._proxy
 
 The rds_os Class
---------------------
+----------------
 
 The rds_os high-level interface is available through the ``rds_os``
 member of a :class:`~openstack.connection.Connection` object.
