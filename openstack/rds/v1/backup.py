@@ -73,14 +73,13 @@ class BackupPolicy(_rdsresource.Resource):
     #: Start time
     starttime = resource.Body('starttime')
 
-    def get(self, session, requires_id=False):
-        return super(BackupPolicy, self).get(session, requires_id=requires_id)
-
     # use put to create, but we don't require id
     def create(self, session, prepend_key=True):
         endpoint_override = self.service.get_endpoint_override()
         request = self._prepare_request(requires_id=False,
                                         prepend_key=prepend_key)
+        if endpoint_override is None:
+            request.uri = self._get_custom_url(session, request.uri)
         response = session.put(request.uri, endpoint_filter=self.service,
                                endpoint_override=endpoint_override,
                                json=request.body, headers=request.headers)

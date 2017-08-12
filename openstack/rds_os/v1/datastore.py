@@ -10,7 +10,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from openstack.rds_os import rds_os_service as rds_service
+from openstack.rds import rds_service as rds_service
 from openstack.rds_os.v1 import rdsresource as _rdsresource
 from openstack import resource2 as resource
 

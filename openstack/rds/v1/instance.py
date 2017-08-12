@@ -84,6 +84,8 @@ class Instance(_rdsresource.Resource):
         """Perform instance action"""
         url = utils.urljoin(self.base_path, self._get_id(self), 'action')
         endpoint_override = self.service.get_endpoint_override()
+        if endpoint_override is None:
+            url = self._get_custom_url(session, url)
         resp = session.post(url, endpoint_filter=self.service,
                             endpoint_override=endpoint_override,
                             json=body,
@@ -125,7 +127,8 @@ class InstanceParameter(_rdsresource.Resource):
         params.pop('instanceId')
         body = {'values': params}
         endpoint_override = cls.service.get_endpoint_override()
-
+        if endpoint_override is None:
+            uri = cls._get_custom_url(session, uri)
         resp = session.put(uri, endpoint_filter=cls.service,
                            endpoint_override=endpoint_override,
                            headers={"Accept": "application/json",
@@ -140,7 +143,8 @@ class InstanceParameter(_rdsresource.Resource):
         uri = utils.urljoin(cls.base_path % params, 'default')
         body = {}
         endpoint_override = cls.service.get_endpoint_override()
-
+        if endpoint_override is None:
+            uri = cls._get_custom_url(session, uri)
         resp = session.put(uri, endpoint_filter=cls.service,
                            endpoint_override=endpoint_override,
                            headers={"X-Language": "en-us"},
