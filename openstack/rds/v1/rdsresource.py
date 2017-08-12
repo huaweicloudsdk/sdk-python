@@ -17,6 +17,26 @@ from openstack import utils
 
 
 class Resource(resource.Resource):
+
+    _version_str = '/rds/v1/'
+
+    def _get_custom_url(self, session, url):
+        key = (self.service.service_type, self.service.interface)
+
+        if key in session.endpoint_cache:
+            base_url = session.endpoint_cache[key]
+        else:
+            base_url = session.get_endpoint(
+                interface=self.service.interface,
+                service_type=self.service.service_type)
+
+        # IAM only returns rds base url, as we need to hack
+        # this to support both hw rds and openstack rds
+        # provide custom url per resource type
+        custom_url = utils.urljoin(base_url, self._version_str,
+                                   session.get_project_id(), url)
+        return custom_url
+
     # overwrite resource2._prepare_request as maas requires header
     # to have Content-type
     def _prepare_request(self, requires_id=True, prepend_key=False):
@@ -45,6 +65,9 @@ class Resource(resource.Resource):
             raise exceptions.MethodNotSupported(self, "get")
         request = self._prepare_request(requires_id=requires_id)
         endpoint_override = self.service.get_endpoint_override()
+        if endpoint_override is None:
+            request.uri = self._get_custom_url(session, request.uri)
+
         response = session.get(request.uri, endpoint_filter=self.service,
                                endpoint_override=endpoint_override,
                                headers=request.headers)
@@ -90,6 +113,8 @@ class Resource(resource.Resource):
 
         while more_data:
             endpoint_override = cls.service.get_endpoint_override()
+            if endpoint_override is None:
+                uri = cls._get_custom_url(session, uri)
             resp = session.get(uri, endpoint_filter=cls.service,
                                endpoint_override=endpoint_override,
                                headers={"Content-type": "application/json",
@@ -126,3 +151,111 @@ class Resource(resource.Resource):
                 return
             query_params["limit"] = yielded
             query_params["marker"] = new_marker
+
+    def create(self, session, prepend_key=True):
+        """Create a remote resource based on this instance.
+
+        :param session: The session to use for making this request.
+        :type session: :class:`~openstack.session.Session`
+        :param prepend_key: A boolean indicating whether the resource_key
+                            should be prepended in a resource creation
+                            request. Default to True.
+
+        :return: This :class:`Resource` instance.
+        :raises: :exc:`~openstack.exceptions.MethodNotSupported` if
+                 :data:`Resource.allow_create` is not set to ``True``.
+        """
+        if not self.allow_create:
+            raise exceptions.MethodNotSupported(self, "create")
+
+        endpoint_override = self.service.get_endpoint_override()
+
+        if self.put_create:
+            request = self._prepare_request(requires_id=True,
+                                            prepend_key=prepend_key)
+            if endpoint_override is None:
+                request.uri = self._get_custom_url(session, request.uri)
+
+            response = session.put(request.uri, endpoint_filter=self.service,
+                                   endpoint_override=endpoint_override,
+                                   json=request.body, headers=request.headers)
+        else:
+            request = self._prepare_request(requires_id=False,
+                                            prepend_key=prepend_key)
+            if endpoint_override is None:
+                request.uri = self._get_custom_url(session, request.uri)
+
+            response = session.post(request.uri, endpoint_filter=self.service,
+                                    endpoint_override=endpoint_override,
+                                    json=request.body, headers=request.headers)
+
+        self._translate_response(response)
+        return self
+
+    def update(self, session, prepend_key=True, has_body=True):
+        """Update the remote resource based on this instance.
+
+        :param session: The session to use for making this request.
+        :type session: :class:`~openstack.session.Session`
+        :param prepend_key: A boolean indicating whether the resource_key
+                            should be prepended in a resource update request.
+                            Default to True.
+
+        :return: This :class:`Resource` instance.
+        :raises: :exc:`~openstack.exceptions.MethodNotSupported` if
+                 :data:`Resource.allow_update` is not set to ``True``.
+        """
+        # The id cannot be dirty for an update
+        self._body._dirty.discard("id")
+
+        # Only try to update if we actually have anything to update.
+        if not any([self._body.dirty, self._header.dirty]):
+            return self
+
+        if not self.allow_update:
+            raise exceptions.MethodNotSupported(self, "update")
+
+        request = self._prepare_request(prepend_key=prepend_key)
+
+        endpoint_override = self.service.get_endpoint_override()
+        if endpoint_override is None:
+            request.uri = self._get_custom_url(session, request.uri)
+
+        if self.patch_update:
+            response = session.patch(request.uri, endpoint_filter=self.service,
+                                     endpoint_override=endpoint_override,
+                                     json=request.body,
+                                     headers=request.headers)
+        else:
+            response = session.put(request.uri, endpoint_filter=self.service,
+                                   endpoint_override=endpoint_override,
+                                   json=request.body, headers=request.headers)
+
+        self._translate_response(response, has_body=has_body)
+        return self
+
+    def delete(self, session):
+        """Delete the remote resource based on this instance.
+
+        :param session: The session to use for making this request.
+        :type session: :class:`~openstack.session.Session`
+
+        :return: This :class:`Resource` instance.
+        :raises: :exc:`~openstack.exceptions.MethodNotSupported` if
+                 :data:`Resource.allow_update` is not set to ``True``.
+        """
+        if not self.allow_delete:
+            raise exceptions.MethodNotSupported(self, "delete")
+
+        request = self._prepare_request()
+
+        endpoint_override = self.service.get_endpoint_override()
+        if endpoint_override is None:
+            request.uri = self._get_custom_url(session, request.uri)
+
+        response = session.delete(request.uri, endpoint_filter=self.service,
+                                  endpoint_override=endpoint_override,
+                                  headers={"Accept": ""})
+
+        self._translate_response(response, has_body=False)
+        return self

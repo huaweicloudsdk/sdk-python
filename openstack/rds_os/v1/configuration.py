@@ -10,7 +10,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from openstack.rds_os import rds_os_service as rds_service
+from openstack.rds import rds_service as rds_service
 from openstack.rds_os.v1 import rdsresource as _rdsresource
 from openstack import resource2 as resource
 from openstack import utils
@@ -84,6 +84,11 @@ class Configurations(_rdsresource.Resource):
         """Get associated instancs"""
         url = utils.urljoin(self.base_path, self._get_id(self), 'instances')
         endpoint_override = self.service.get_endpoint_override()
+        # construct full http url for rds_os as rds wont' return correct
+        # endpoint for now and work around with get_endpoint()
+        if endpoint_override is None:
+            url = self._get_custom_url(session, url)
+
         resp = session.get(url, endpoint_filter=self.service,
                            endpoint_override=endpoint_override,
                            headers={"Accept": "application/json",
@@ -101,6 +106,10 @@ class Configurations(_rdsresource.Resource):
                 "values": kwargs
             }
         }
+
+        if endpoint_override is None:
+            url = self._get_custom_url(session, url)
+
         resp = session.patch(url, endpoint_filter=self.service,
                              endpoint_override=endpoint_override,
                              headers={"Accept": "application/json",
@@ -118,6 +127,9 @@ class Configurations(_rdsresource.Resource):
     def delete(self, session):
         request = self._prepare_request()
         endpoint_override = self.service.get_endpoint_override()
+        if endpoint_override is None:
+            request.uri = self._get_custom_url(session, request.uri)
+
         response = session.delete(request.uri, endpoint_filter=self.service,
                                   endpoint_override=endpoint_override,
                                   headers=request.headers)
