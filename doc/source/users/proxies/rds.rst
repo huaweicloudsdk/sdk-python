@@ -6,7 +6,7 @@ For details on how to use rds, see :doc:`/users/guides/rds`
 .. automodule:: openstack.rds.v1._proxy
 
 The RDS Class
---------------------
+-------------
 
 The rds high-level interface is available through the ``rds``
 member of a :class:`~openstack.connection.Connection` object.
@@ -58,3 +58,43 @@ Parameters Operations
 
    .. automethod:: openstack.rds.v1._proxy.Proxy.parameters
    .. automethod:: openstack.rds.v1._proxy.Proxy.get_parameter
+
+OpenStack Compatible Instance Operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: openstack.rds.v1._proxy.Proxy
+
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_instances
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_instance
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_delete_instance
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_create_instance
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_resize_instance
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_resize_instance_volume
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_restart_instance
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_restore_instance
+
+OpenStack Compatible Flavor Operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: openstack.rds.v1._proxy.Proxy
+
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_flavors
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_flavor
+
+OpenStack Compatible Parameters Operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: openstack.rds.v1._proxy.Proxy
+
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_parameters
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_parameter
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_instance_default_configuration
+
+OpenStack Compatible Parameter Group Operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. autoclass:: openstack.rds.v1._proxy.Proxy
+
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_list_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_create_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_delete_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_update_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_patch_configuration_group
+   .. automethod:: openstack.rds.v1._proxy.Proxy.os_get_configuration_group_associated_instances
