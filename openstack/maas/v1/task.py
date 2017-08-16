@@ -105,12 +105,12 @@ class Task(_maasresource.Resource):
         request = self._prepare_request(prepend_key=True)
         resp = session.put(url, endpoint_filter=self.service,
                            endpoint_override=endpoint_override,
-                           json=request.body,
+                           json=kwargs,
                            headers=request.headers)
         return resp.json()
 
     def start(self, session, source_ak, source_sk, target_ak, target_sk):
-        return self._action(session, operation='sart',
+        return self._action(session, operation='start',
                             source_ak=source_ak,
                             source_sk=source_sk,
                             target_ak=target_ak,
