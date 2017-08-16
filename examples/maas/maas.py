@@ -15,26 +15,6 @@ Managing maas
 
 """
 
-
-def overwrite_agent(conn):
-    agent_dict = {
-        'ip': "255.255.255.255",
-        'port': "8080",
-        'agent_name': "agent_name",
-    }
-    print(conn.maas.overwrite_agent(**agent_dict))
-
-
-def delete_agent(conn):
-    conn.maas.delete_agent("255.255.255.0")
-
-
-def agents(conn):
-    print("list all agents")
-    for a in conn.maas.agents():
-        print(a)
-
-
 def create_task(conn):
     task_dict = {
         "src_node":
