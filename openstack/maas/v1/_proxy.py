@@ -26,8 +26,10 @@ class Proxy(proxy2.BaseProxy):
         return self._list(_version.Version, paginated=False)
 
     def tasks(self, **query):
-        """Get all agents
+        """Query all tasks of a tenant
 
+        :param dict query: Dict of query parameters, possible keys are `start`,
+                           `limit`, `state` of the migration task.
         :returns: A generator of migration task object
         :rtype: :class:`~openstack.maas.v1.task.Task`
         """
@@ -37,8 +39,8 @@ class Proxy(proxy2.BaseProxy):
         """Create a migrate task
 
         :param dict kwargs: Keyword arguments which will be used to overwrite a
-                            :class:`~openstack.maas.v1.agent.Agent`
-        :rtype: :class:`~openstack.maas.v1.agent.Agent`
+                            :class:`~openstack.maas.v1.task.Task`
+        :rtype: :class:`~openstack.maas.v1.task.Task`
         """
         return self._create(_task.Task, **kwargs)
 
