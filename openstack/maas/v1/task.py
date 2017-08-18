@@ -136,3 +136,33 @@ class Task(_maasresource.Resource):
                            params=query_params)
         resp = resp.json()
         return resp.get('taskcount')
+
+    # overwrite resource2.py get to add request.headers
+    # if all maas API requres get to have headers move this
+    # to maasresrouce.py
+    def get(self, session, requires_id=True):
+
+        request = self._prepare_request(requires_id=requires_id)
+
+        endpoint_override = self.service.get_endpoint_override()
+        response = session.get(request.uri, endpoint_filter=self.service,
+                               headers=request.headers,
+                               endpoint_override=endpoint_override)
+
+        self._translate_response(response)
+        return self
+
+    # overwrite resource2.py delete to add request.headers
+    # if all maas API requres delete to have headers move this
+    # to maasresrouce.py
+    def delete(self, session):
+
+        request = self._prepare_request()
+
+        endpoint_override = self.service.get_endpoint_override()
+        response = session.delete(request.uri, endpoint_filter=self.service,
+                                  endpoint_override=endpoint_override,
+                                  headers=request.headers)
+
+        self._translate_response(response, has_body=False)
+        return self
