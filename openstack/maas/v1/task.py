@@ -107,7 +107,11 @@ class Task(_maasresource.Resource):
                            endpoint_override=endpoint_override,
                            json=kwargs,
                            headers=request.headers)
-        return resp.json()
+
+        if resp is not None and resp.status_code == 200:
+            return True
+
+        return False
 
     def start(self, session, source_ak, source_sk, target_ak, target_sk):
         return self._action(session, operation='start',

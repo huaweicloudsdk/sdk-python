@@ -77,15 +77,17 @@ class Proxy(proxy2.BaseProxy):
         :param target_ak: Target node ak
         :param target_sk: Target node sk
 
-        :returns: ``None``
+        :returns: Action successful or not
+        :rtype: bool
         """
         if isinstance(task, _task.Task):
             task_obj = task
         else:
             task_obj = _task.Task.existing(id=task)
 
-        task_obj.start(self._session,
-                       source_ak, source_sk, target_ak, target_sk)
+        return task_obj.start(self._session,
+                              source_ak, source_sk,
+                              target_ak, target_sk)
 
     def stop_task(self, task):
         """Stop a migration task
@@ -93,14 +95,15 @@ class Proxy(proxy2.BaseProxy):
         :param task_id: The task id or an instance of
                         :class:`~openstack.maas.v1.task.Task`
 
-        :returns: ``None``
+        :returns: Action successful or not
+        :rtype: bool
         """
         if isinstance(task, _task.Task):
             task_obj = task
         else:
             task_obj = _task.Task.existing(id=task)
 
-        task_obj.stop(self._session)
+        return task_obj.stop(self._session)
 
     def task_count(self, state=None):
         """Return total migrate task with state
