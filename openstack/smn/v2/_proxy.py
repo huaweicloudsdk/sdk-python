@@ -100,7 +100,8 @@ class Proxy(proxy2.BaseProxy):
 
         :param topic_attr: The topicattr object
                            :class:`~openstack.smn.v2.topic.TopicAttr`
-        :param attrname: attrname
+        :param attrname: attribute name. String value.
+        :param value: Topic attribute to be updated. String value
         :rtype: :class:`~openstack.smn.v2.topic.TopicAttr`
         """
 

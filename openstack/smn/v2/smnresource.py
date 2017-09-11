@@ -24,6 +24,8 @@ class Resource(resource.Resource):
         if prepend_key and self.resource_key is not None:
             body = {self.resource_key: body}
 
+        body.pop('attributes_name', None)
+
         headers = self._header.dirty
 
         headers.update({'Content-type': 'application/json'})
