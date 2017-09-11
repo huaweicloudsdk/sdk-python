@@ -77,10 +77,8 @@ def operate_topic_attr(conn):
     print(tpr)
 
     print("update a topic attr by attr name")
-    attr_val_dict = {
-        "Version": "2016-09-07"
-    }
-    print(conn.smn.update_topic_attr(tpr, 'access_policy', attr_val_dict))
+    attr_val_str = """{\"Version\": \"2016-09-07\"}"""
+    print(conn.smn.update_topic_attr(tpr, 'access_policy', attr_val_str))
 
     print("delete topic access_policy attribute")
     conn.smn.delete_topic_attr(tpr, 'access_policy')

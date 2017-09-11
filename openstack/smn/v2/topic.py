@@ -96,8 +96,8 @@ class TopicAttr(_smnresource.Resource):
     topic_urn = resource.URI('topic_urn')
     #: attribute name
     attributes_name = resource.Body('attributes_name', alternate_id=True)
-    #: attribute value  fixme
-    attr_value = resource.Body('value', type=dict)
+    #: attribute value are string
+    attr_value = resource.Body('value')
     #: attributes
     #: *Type: dict*
     attributes = resource.Body('attributes', type=dict)
