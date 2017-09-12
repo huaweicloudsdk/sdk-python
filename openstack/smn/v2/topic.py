@@ -101,6 +101,8 @@ class TopicAttr(_smnresource.Resource):
     #: attributes
     #: *Type: dict*
     attributes = resource.Body('attributes', type=dict)
+    #: request_id
+    request_id = resource.Body('request_id')
 
     # capabilities
     allow_update = True
