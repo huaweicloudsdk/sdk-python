@@ -47,7 +47,7 @@ def update_eip(conn):
                        'http_request_pos_id': 1,
                        'cleaning_access_pos_id': 1,
                        'app_type_id': 0}
-    ufip = conn.anti_ddos.update_floating_ip(fip, fip_update_dict)
+    ufip = conn.anti_ddos.update_floating_ip(fip, **fip_update_dict)
     print(ufip)
 
 
