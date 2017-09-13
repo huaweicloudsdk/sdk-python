@@ -181,8 +181,8 @@ class MessageConsume(resource.Resource):
             for r in resp:
                 r['queue_id'] = params.get('queue_id')
                 r['consumer_group_id'] = params.get('consumer_group_id')
+                ret.append(cls.existing(**r))
 
-            ret.append(cls.existing(**r))
             return ret
 
     def ack(self, session, status='success'):
