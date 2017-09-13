@@ -100,6 +100,8 @@ class FloatingIP(resource.Resource):
     network_type = resource.Body('network_type')
     #: Status of the EIP
     status = resource.Body('status')
+    #: Task id
+    task_id = resource.Body('task_id')
 
     def create(self, session, prepend_key=True):
         endpoint_override = self.service.get_endpoint_override()
