@@ -106,3 +106,12 @@ def consume_message(conn, queue):
     for cm in conn.dms.consume_message(queue, grp[0].id):
         print("ack consumed message")
         print(conn.dms.ack_consumed_message(cm))
+
+
+def get_quotas(conn):
+
+    for q in conn.dms.quotas():
+        print(q)
+        print(q.type)
+        print(q.quota)
+        print(q.used)
