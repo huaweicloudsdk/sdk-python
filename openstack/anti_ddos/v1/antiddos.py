@@ -183,6 +183,7 @@ class EIPLog(resource.Resource):
 
     resources_key = 'logs'
     base_path = '/antiddos/%(floating_ip_id)s/logs'
+    service = anti_ddos_service.AntiDDosService()
 
     _query_mapping = resource.QueryParameters('limit', 'offset', 'sort_dir')
 
