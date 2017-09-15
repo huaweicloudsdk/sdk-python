@@ -163,3 +163,93 @@ def operate_template_message(conn):
     conn.smn.delete_message_template(updatedm)
     for m in conn.smn.message_templates(offset=0, limit=10):
         print(m)
+
+
+def publish_struct_message(conn, topic):
+    # topic is the topic object or topoic urn
+    message_dict = {
+        "subject": "test message v2",
+        "message_structure":
+        "{\"default\":\"test v2 default\", \"email\":\"abc\"}"
+    }
+
+    conn.smn.publish_topic(topic, **message_dict)
+
+
+def publish_template_message(conn, topic):
+    # topic is the topic object or topoic urn
+    message_dict = {
+        "message_template_name": "confirm_message",
+        "tags": {
+            "topic_urn": "topic_urn3331",
+            "topic_id": "topic_id3332"
+        }
+    }
+
+    conn.smn.publish_topic(topic, **message_dict)
+
+
+def subscript_topic_sms(conn):
+
+    topic_dict = {
+        'name': 'labj',
+        'display_name': 'djb1',
+    }
+
+    print("create a topic")
+    tp = conn.smn.create_topic(**topic_dict)
+
+    sub_dict = {
+        'protocol': 'sms',
+        'endpoint': '+123456',
+        'remark': 'test',
+    }
+
+    sub = conn.smn.subscript_topic(tp, **sub_dict)
+    print(sub)
+    print("delete the topic")
+    conn.smn.delete_topic(tp)
+
+
+def subscript_topic_http(conn):
+
+    topic_dict = {
+        'name': 'labj',
+        'display_name': 'djb2',
+    }
+
+    print("create a topic")
+    tp = conn.smn.create_topic(**topic_dict)
+
+    sub_dict = {
+        'protocol': 'http',
+        'endpoint': 'http://foo.bar.com',
+        'remark': 'test',
+    }
+
+    sub = conn.smn.subscript_topic(tp, **sub_dict)
+    print(sub)
+    print("delete the topic")
+    conn.smn.delete_topic(tp)
+
+
+def subscript_topic_https(conn):
+
+    topic_dict = {
+        'name': 'labj',
+        'display_name': 'djb2',
+    }
+
+    print("create a topic")
+    tp = conn.smn.create_topic(**topic_dict)
+
+    sub_dict = {
+        'protocol': 'https',
+        'endpoint': 'https://foo.bar.com',
+        'remark': 'test',
+    }
+
+    sub = conn.smn.subscript_topic(tp, **sub_dict)
+    print(sub)
+    print("delete the topic")
+    conn.smn.delete_topic(tp)
