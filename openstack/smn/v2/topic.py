@@ -10,6 +10,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import json
 
 from openstack import resource2 as resource
 from openstack.smn import smn_service
@@ -49,6 +50,12 @@ class Topic(_smnresource.Resource):
     #: *Type: int*
     push_policy = resource.Body('push_policy', type=int)
 
+    def _dict_to_str(self, dt):
+        # dict to json string
+        ret = json.dumps(dt)
+        ret = ret.replace('"', '\\"')
+        return ret
+
     def publish(self, session, **kwargs):
         url = utils.urljoin(self.base_path, self._get_id(self), 'publish')
 
@@ -59,6 +66,11 @@ class Topic(_smnresource.Resource):
         }
 
         endpoint_override = self.service.get_endpoint_override()
+
+        if 'message_structure' in kwargs:
+            kwargs['message_structure'] = (
+                self._dict_to_str(kwargs['message_structure']))
+
         resp = session.post(url, endpoint_filter=self.service,
                             endpoint_override=endpoint_override,
                             json=kwargs,
