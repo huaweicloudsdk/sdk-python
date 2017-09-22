@@ -39,6 +39,8 @@ class SubscriptionMin(_smnresource.Resource):
     #: Status: 0, 1, 3.
     #: *Type: int*
     status = resource.Body('status', type=int)
+    #: Request id
+    request_id = resource.Body('request_id')
 
 
 class Subscription(SubscriptionMin):
@@ -53,7 +55,7 @@ class Subscription(SubscriptionMin):
     topic_urn = resource.Body('topic_urn')
 
     def confirm(self, session, token):
-        url = '/subscriptions/confirmation'
+        url = '/notifications/confirmation'
         endpoint_override = self.service.get_endpoint_override()
 
         body = {"token": token}
@@ -68,10 +70,10 @@ class Subscription(SubscriptionMin):
                    "Content-type": "application/json",
                    "Content-Length": str(len(str(body)))}
 
-        resp = session.post(url, endpoint_filter=self.service,
-                            endpoint_override=endpoint_override,
-                            headers=headers,
-                            json=body)
+        resp = session.put(url, endpoint_filter=self.service,
+                           endpoint_override=endpoint_override,
+                           headers=headers,
+                           json=body)
         return resp.json()
 
 
