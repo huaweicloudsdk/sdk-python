@@ -53,7 +53,6 @@ class Topic(_smnresource.Resource):
     def _dict_to_str(self, dt):
         # dict to json string
         ret = json.dumps(dt)
-        ret = ret.replace('"', '\\"')
         return ret
 
     def publish(self, session, **kwargs):

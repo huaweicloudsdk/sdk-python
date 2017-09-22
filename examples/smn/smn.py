@@ -77,7 +77,17 @@ def operate_topic_attr(conn):
     print(tpr)
 
     print("update a topic attr by attr name")
-    attr_val_str = """{\"Version\": \"2016-09-07\"}"""
+    attr_val_str = \
+        "{\"Version\": \"2016-09-07\",  \"Id\": \"__default_policy_ID\",  " \
+        "\"Statement\": [{\"Sid\": \"__user_pub_0\",\"Effect\": \"Allow\"" \
+        ",\"Principal\": {\"CSP\": [\"urn:csp:iam::93dc1b4697ac493d9b7d0895" \
+        "69f86b32:root\"]},\"Action\": [\"SMN:Publish\",\"SMN:QueryTopicDeta" \
+        "il\"],\"Resource\": \"urn:smn:regionId:8bad8a40e0f7462f8c1676e3f93a" \
+        "8183:zhaoli\"},{\"Sid\": \"__service_pub_0\",      \"Effect\": \"Al" \
+        "low\",\"Principal\": {\"Service\": [\"obs\"]},\"Action\": [\"SMN:Pu" \
+        "blish\",\"SMN:QueryTopicDetail\"],\"Resource\": \"urn:smn:regionId:" \
+        "8bad8a40e0f7462f8c1676e3f93a8183:zhaoli\"}]}"
+
     print(conn.smn.update_topic_attr(tpr, 'access_policy', attr_val_str))
 
     print("delete topic access_policy attribute")
@@ -128,9 +138,9 @@ def subscript_topic(conn):
     sub = conn.smn.subscript_topic(tp, **sub_dict)
     print(sub)
     print("confirm subscription")
-    print(conn.smn.confirm_subcription(sub, "token"))
+    print(conn.smn.confirm_subcription(sub, "762bdb3251034f268af0e395c53ea09bc0ce331b2593449a9f5097a679092746a2d52a9f5c3b47f48c3fafb177a587961fb95fce9d8044e28e77e903a887fffe"))
     print("unsub")
-    conn.smn.unsubscript_topic(sub.subscription_urn)
+    print conn.smn.unsubscript_topic(sub.subscription_urn)
     print("delete the topic")
     conn.smn.delete_topic(tp)
 
@@ -173,7 +183,7 @@ def publish_struct_message(conn, topic):
         "{\"default\":\"test v2 default\", \"email\":\"abc\"}"
     }
 
-    conn.smn.publish_topic(topic, **message_dict)
+    print(conn.smn.publish_topic(topic, **message_dict))
 
 
 def publish_template_message(conn, topic):
@@ -186,7 +196,7 @@ def publish_template_message(conn, topic):
         }
     }
 
-    conn.smn.publish_topic(topic, **message_dict)
+    print(conn.smn.publish_topic(topic, **message_dict))
 
 
 def subscript_topic_sms(conn):
