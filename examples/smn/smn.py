@@ -149,7 +149,7 @@ def operate_template_message(conn):
     m_dict = {
         'message_template_name': 'testfoobarxxx',
         'protocol': "email",
-        'content': 'what the fuck!'
+        'content': 'what the hell!'
     }
     update_dict = {
         'content': 'be civilization'
