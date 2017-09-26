@@ -10,6 +10,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import hashlib
 
 from openstack.kms.v1 import key as _key
 from openstack import proxy2
@@ -175,6 +176,16 @@ class Proxy(proxy2.BaseProxy):
         if not isinstance(datakey, _key.DataKey):
             params.update({'key_id': datakey})
             data_key_obj = _key.DataKey.new(**params)
+
+        plain_text = params.get("plain_text")
+        if plain_text is None:
+            raise ValueError("plain_text should be provided")
+        # user provids plain text, do hash inside sdk
+        hash = hashlib.sha256()
+        hex_data = str(plain_text).decode("hex")
+        hash.update(bytearray(hex_data))
+        digest = hash.hexdigest()
+        params.update({'plain_text': plain_text + digest})
 
         return data_key_obj.encrypt(self._session, **params)
 
