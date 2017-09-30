@@ -138,9 +138,13 @@ def subscript_topic(conn):
     sub = conn.smn.subscript_topic(tp, **sub_dict)
     print(sub)
     print("confirm subscription")
-    print(conn.smn.confirm_subcription(sub, "762bdb3251034f268af0e395c53ea09bc0ce331b2593449a9f5097a679092746a2d52a9f5c3b47f48c3fafb177a587961fb95fce9d8044e28e77e903a887fffe"))
+    print(conn.smn.confirm_subcription(sub,
+                                       "762bdb3251034f268af0e395c53ea09bc0ce"
+                                       "331b2593449a9f5097a679092746a2d52a9f"
+                                       "5c3b47f48c3fafb177a587961fb95fce9d80"
+                                       "44e28e77e903a887fffe"))
     print("unsub")
-    print conn.smn.unsubscript_topic(sub.subscription_urn)
+    print(conn.smn.unsubscript_topic(sub.subscription_urn))
     print("delete the topic")
     conn.smn.delete_topic(tp)
 
