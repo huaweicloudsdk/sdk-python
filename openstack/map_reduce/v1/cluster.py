@@ -78,7 +78,7 @@ class Cluster(resource.Resource):
     allow_delete = True
 
     _query_mapping = resource.QueryParameters(
-        "sort_by"
+        "sort_by", marker="limit"
     )
 
     #: Properties

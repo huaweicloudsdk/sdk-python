@@ -16,7 +16,9 @@
 import logging
 import os
 
+
 from examples.connect import create_connection_from_config
+from examples.load_balancer import load_balancer
 
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT)
@@ -44,9 +46,9 @@ os.environ.setdefault(
 
 # initial connection
 conn = create_connection_from_config()
-detail = conn.map_reduce.get_cluster("0f4ab6b7-a723-4b6c-b326-f8a5711d365a")
+# detail = conn.map_reduce.get_cluster("0f4ab6b7-a723-4b6c-b326-f8a5711d365a")
 #
-# load_balancer.list_loadbalancers(conn)
+load_balancer.list_loadbalancers(conn)
 
 # subnets = conn.network.subnets(limit=1)
 # routers = conn.network.routers(limit=1)
