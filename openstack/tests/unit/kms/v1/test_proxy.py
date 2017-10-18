@@ -10,10 +10,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import hashlib
 import mock
 
 from openstack.kms.v1 import _proxy
 from openstack.tests.unit import test_proxy_base2
+
+
+PLAIN_TEXT = "00000000000000000000000000000000000000000000000000000000000000" \
+             "00000000000000000000000000000000000000000000000000000000000000" \
+             "0000F5A5FD42D16A20302798EF6ED309979B43003D2320D9F0E8EA9831A927" \
+             "59FB4B"
 
 
 class TestKMSProxy(test_proxy_base2.TestProxyBase):
@@ -86,11 +93,19 @@ class TestKMSProxy(test_proxy_base2.TestProxyBase):
                       expected_kwargs={'key_id': 'key'})
 
     def test_encrypt_datakey(self):
+
+        plain_text = PLAIN_TEXT
+        hash = hashlib.sha256()
+        hex_data = str(PLAIN_TEXT).decode("hex")
+        hash.update(bytearray(hex_data))
+        digest = hash.hexdigest()
         self._verify2('openstack.kms.v1.key.DataKey.encrypt',
                       self.proxy.encrypt_datakey,
                       method_args=['key'],
+                      method_kwargs={'plain_text': PLAIN_TEXT},
                       expected_args=[mock.ANY],
-                      expected_kwargs={'key_id': 'key'})
+                      expected_kwargs={'key_id': 'key',
+                                       'plain_text': plain_text + digest})
 
     def test_decrypt_datakey(self):
         self._verify2('openstack.kms.v1.key.DataKey.decrypt',
