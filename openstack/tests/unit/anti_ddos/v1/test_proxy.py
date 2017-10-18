@@ -83,7 +83,7 @@ class TestAntiDDosProxy(test_proxy_base2.TestProxyBase):
     def test_list_eip_weekly(self):
         self._verify2('openstack.anti_ddos.v1.antiddos.AntiDDosMin.list',
                       self.proxy.get_eip_weekly,
-                      method_args=['data'],
+                      method_args=['date'],
                       expected_args=[mock.ANY],
                       expected_kwargs={'period_start_date': 'date'})
 
