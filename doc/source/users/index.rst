@@ -41,6 +41,14 @@ approach, this is where you'll want to begin.
    Object Store <guides/object_store>
    Orchestration <guides/orchestration>
    Telemetry <guides/telemetry>
+   MAAS <guides/maas>
+   Anti-DDos <guides/anti_ddos>
+   SMN <guides/smn>
+   CTS <guides/cts>
+   DMS <guides/dms>
+   KMS <guides/kms>
+   RDS <guides/rds>
+   RDS_OS <guides/rds_os>
 
 API Documentation
 -----------------
@@ -90,6 +98,14 @@ but listed below are the ones provided by this SDK by default.
    Orchestration <proxies/orchestration>
    Telemetry <proxies/telemetry>
    Workflow <proxies/workflow>
+   MAAS <proxies/maas>
+   Anti-DDos <proxies/anti_ddos>
+   SMN <proxies/smn>
+   CTS <proxies/cts>
+   DMS <proxies/dms>
+   KMS <proxies/kms>
+   RDS <proxies/rds>
+   RDS_OS <proxies/rds_os>
 
 Resource Interface
 ******************
@@ -120,6 +136,14 @@ The following services have exposed *Resource* classes.
    Object Store <resources/object_store/index>
    Telemetry <resources/telemetry/index>
    Workflow <resources/workflow/index>
+   MAAS <resources/maas/index>
+   Anti-DDos <resources/anti_ddos/index>
+   SMN <resources/smn/index>
+   CTS <resources/cts/index>
+   DMS <resources/dms/index>
+   KMS <resources/kms/index>
+   RDS <resources/rds/index>
+   RDS_OS <resources/rds_os/index>
 
 Low-Level Classes
 *****************
