@@ -18,6 +18,7 @@ from openstack.tests.unit import base
 class TestProfile(base.TestCase):
     def test_init(self):
         expected = [
+            'anti-ddos',
             'alarming',
             'auto-scaling',
             'baremetal',
