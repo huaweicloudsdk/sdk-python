@@ -63,6 +63,11 @@ class TestRecordset(base.BaseFunctionalTest):
     @classmethod
     def tearDownClass(cls):
         #: delete zone
+        resource2.wait_for_status(cls.conn.dns._session,
+                                  cls.recordset,
+                                  "ACTIVE",
+                                  interval=5,
+                                  failures=["ERROR"])
         cls.conn.dns.delete_recordset(cls.zone, cls.recordset)
         cls.conn.dns.delete_zone(cls.zone)
 

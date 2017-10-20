@@ -36,9 +36,9 @@ def auto_create_group(conn, group_name, config_id):
     #     raise Exception("VPC/Network/SecurityGroup is not realy")
 
     # ok.. we just use fixed vpc/network/sg here
-    vpc_id = "31d158b8-e7d7-4b4a-b2a7-a5240296b267"
-    network_id = "85d0d006-44f9-4f32-8384-7f8a8198bed6"
-    sg_id = "0005ba27-b937-4a7c-a280-c7b65cea2e47"
+    vpc_id = "14ece7d0-a8d4-4317-982a-041e4f10f442"
+    network_id = "327a257b-4761-4ab9-a3f8-4e1a754f6c11"
+    sg_id = "1d784830-ffae-4083-ad92-2d25f6794c16"
     return create_group(conn,
                         group_name,
                         config_id,
