@@ -18,7 +18,7 @@ from openstack.rds_os import rds_os_service
 class TestRDSOSService(testtools.TestCase):
 
     def test_service(self):
-        sot = rds_os_service.RDSOSService()
+        sot = rds_os_service.RDSService()
         self.assertEqual('rds_os', sot.service_type)
         self.assertEqual('public', sot.interface)
         self.assertIsNone(sot.region)
