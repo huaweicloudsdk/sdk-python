@@ -28,10 +28,10 @@ os.environ.setdefault(
     ('https://as.eu-de.otc.t-systems.com'
      '/autoscaling-api/v1/%(project_id)s')
 )
-os.environ.setdefault(
-    'OS_DNS_ENDPOINT_OVERRIDE',
-    'https://dns.eu-de.otc.t-systems.com'
-)
+# os.environ.setdefault(
+#     'OS_DNS_ENDPOINT_OVERRIDE',
+#     'https://dns.eu-de.otc.t-systems.com/v2'
+# )
 os.environ.setdefault(
     'OS_VOLUME_BACKUP_ENDPOINT_OVERRIDE',
     'https://vbs.eu-de.otc.t-systems.com/v2/%(project_id)s'
