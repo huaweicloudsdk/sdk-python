@@ -25,12 +25,14 @@ def auto_create_config(conn, config_name):
                                     ignore_missing=False)
     keypairs = list(conn.compute.keypairs())
     if len(keypairs) == 0:
-        raise Exception("no keypair available for test")
+        keypair = conn.compute.create_keypair(name="sdk-unittest")
+    else:
+        keypair = keypairs[0]
     return create_config(conn,
                          config_name,
                          flavor.id,
                          image.id,
-                         keypairs[0].name)
+                         keypair.name)
 
 
 def create_config(conn, name, flavor_id, image_id, key_name):
