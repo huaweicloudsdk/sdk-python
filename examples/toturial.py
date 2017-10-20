@@ -12,10 +12,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import datetime
 import os
+import time
 
 from openstack import connection
-
 
 # setup endpoint override for cloud services
 os.environ.setdefault(
@@ -45,17 +46,94 @@ os.environ.setdefault(
 )
 
 # create connection
-username = "replace-with-your-username"
-password = "replace-with-your-password"
-projectId = "d4f2557d248e4860829f5fef030b209c"
-userDomainId = "bb42e2cd2b784ac4bdc350fb660a2bdb"
+username = "zhangdong"
+password = "SDK2017#"
+projectId = "18899b93e7be46c2b7f0d2568efabc33"
+userDomainId = "71629073818b445d8d30591c545056d0"
 auth_url = "https://iam.eu-de.otc.t-systems.com/v3"
+
+# username = "replace-with-your-username"
+# password = "replace-with-your-password"
+# projectId = "18899b93e7be46c2b7f0d2568efabc33"
+# userDomainId = "71629073818b445d8d30591c545056d0"
+# auth_url = "https://iam.eu-de.otc.t-systems.com/v3"
 conn = connection.Connection(auth_url=auth_url,
                              user_domain_id=userDomainId,
                              project_id=projectId,
                              username=username,
                              password=password)
 
-# call API
-zones = conn.dns.zone.list()
-print(list(zones))
+# some common constant required by toturial
+now = datetime.datetime.now()
+dimensions = [{
+    "name": "instance_id",
+    "value": "33328f02-3814-422e-b688-bfdba93d4050"
+}]
+
+
+def get_epoch_time(datetime_):
+    if datetime_:
+        seconds = time.mktime(datetime_.timetuple())
+        return int(seconds) * 1000
+    else:
+        return None
+
+def list_metrics():
+    query = {
+        "namespace": "SYS.ECS",
+        "metric_name": "cpu_util",
+        "limit": 10
+    }
+    metrics = conn.cloud_eye.metrics(**query)
+    for metric in metrics:
+        print metric
+
+
+def add_metric_data():
+    # prepare metric data list
+    data = [
+        {
+            "metric": {
+                "namespace": "SDK.unittests",
+                "dimensions": dimensions,
+                "metric_name": "cpu_util"
+            },
+            "ttl": 604800,
+            "collect_time": get_epoch_time(now - datetime.timedelta(minutes=5)),
+            "value": 60,
+            "unit": "%"
+        },
+        {
+            "metric": {
+                "namespace": "SDK.unittests",
+                "dimensions": dimensions,
+                "metric_name": "cpu_util"
+            },
+            "ttl": 604800,
+            "collect_time": get_epoch_time(now),
+            "value": 60,
+            "unit": "%"
+        }
+    ]
+    conn.cloud_eye.add_metric_data(data)
+
+
+def list_metric_aggr_data():
+    query = {
+        "namespace": "SDK.unittests",
+        "metric_name": "cpu_util",
+        "from": get_epoch_time(now - datetime.timedelta(minutes=5)),
+        "to": get_epoch_time(now),
+        "period": 300,
+        "filter": "average",
+        "dimensions": dimensions
+    }
+    # we query for the data add by add_metric_data()
+    aggregations = list(conn.cloud_eye.metric_aggregations(**query))
+    for aggr in aggregations:
+        print aggr
+
+# visit API
+list_metrics()
+add_metric_data()
+list_metric_aggr_data()
