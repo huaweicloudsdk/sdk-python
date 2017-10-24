@@ -72,11 +72,12 @@ def get_epoch_time(datetime_):
     else:
         return None
 
+
 def list_metrics():
     query = {
         "namespace": "SYS.ECS",
         "metric_name": "cpu_util",
-        "limit": 10
+        "limit": 1
     }
     metrics = conn.cloud_eye.metrics(**query)
     for metric in metrics:
