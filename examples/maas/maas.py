@@ -32,7 +32,6 @@ def create_task(conn):
         },
         "thread_num": 5,
         "enableKMS": True,
-        "enable_tas": False,
         "dst_node":
         {
             "region": "target_region",
