@@ -32,8 +32,6 @@ EXAMPLE = {
     "progress": 1,
     "migrate_speed": 7213154,
     "enableKMS": True,
-    "enable_tas": False,
-    "agent": {"agent_name": "xxx", "ip": "xxx"},
     "description": "ZXCZCZXCDVXVC",
     "error_reason": {},
     "total_size": 2000000000,
@@ -67,8 +65,6 @@ class TestTask(testtools.TestCase):
         self.assertEqual(EXAMPLE['progress'], sot.progress)
         self.assertEqual(EXAMPLE['migrate_speed'], sot.migrate_speed)
         self.assertEqual(EXAMPLE['enableKMS'], sot.enableKMS)
-        self.assertEqual(EXAMPLE['enable_tas'], sot.enable_tas)
-        self.assertEqual(EXAMPLE['agent'], sot.agent)
         self.assertEqual(EXAMPLE['description'], sot.description)
         self.assertEqual(EXAMPLE['error_reason'], sot.error_reason)
         self.assertEqual(EXAMPLE['total_size'], sot.total_size)
