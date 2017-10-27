@@ -56,14 +56,6 @@ class Task(_maasresource.Resource):
     #: Enable KMS
     #: *Type: bool*
     enableKMS = resource.Body('enableKMS', type=bool)
-    #: Enable accelerate
-    #: *Type: bool*
-    enable_tas = resource.Body('enable_tas', type=bool)
-    #: Agent id
-    agent_id = resource.Body('agent_id')
-    #: Agent information only validate when enable_tas is true
-    #: *Type: dict*
-    agent = resource.Body('agent', type=dict)
     #: Taskname
     task_name = resource.Body('task_name')
     #: Task description, empty if user does not set it
