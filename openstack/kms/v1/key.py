@@ -144,7 +144,7 @@ class Key(KmsResource):
 
             if 'next_marker' in resp:
                 if resp['next_marker'] != "":
-                    body['next_marker'] = resp['next_marker']
+                    body['marker'] = resp['next_marker']
 
 
 class DataKey(KmsResource):
