@@ -81,7 +81,7 @@ def list_metrics():
     }
     metrics = conn.cloud_eye.metrics(**query)
     for metric in metrics:
-        print metric
+        print(metric)
 
 
 def add_metric_data():
@@ -94,7 +94,8 @@ def add_metric_data():
                 "metric_name": "cpu_util"
             },
             "ttl": 604800,
-            "collect_time": get_epoch_time(now - datetime.timedelta(minutes=5)),
+            "collect_time": get_epoch_time(now
+                                           - datetime.timedelta(minutes=5)),
             "value": 60,
             "unit": "%"
         },
@@ -126,7 +127,7 @@ def list_metric_aggr_data():
     # we query for the data add by add_metric_data()
     aggregations = list(conn.cloud_eye.metric_aggregations(**query))
     for aggr in aggregations:
-        print aggr
+        print(aggr)
 
 # visit API
 list_metrics()
