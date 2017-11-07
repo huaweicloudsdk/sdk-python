@@ -37,6 +37,9 @@ class Resource(resource.Resource):
                                    session.get_project_id(), url)
         return custom_url
 
+    def _get_custom_override(self, endpoint_override):
+        return endpoint_override + self._version_str + "%(project_id)s"
+
     # overwrite resource2._prepare_request as maas requires header
     # to have Content-type
     def _prepare_request(self, requires_id=True, prepend_key=False):
@@ -67,6 +70,8 @@ class Resource(resource.Resource):
         endpoint_override = self.service.get_endpoint_override()
         if endpoint_override is None:
             request.uri = self._get_custom_url(session, request.uri)
+        else:
+            endpoint_override = self._get_custom_override(endpoint_override)
 
         response = session.get(request.uri, endpoint_filter=self.service,
                                endpoint_override=endpoint_override,
@@ -113,6 +118,11 @@ class Resource(resource.Resource):
 
         while more_data:
             endpoint_override = cls.service.get_endpoint_override()
+            if endpoint_override is None:
+                uri = cls._get_custom_url(session, uri)
+            else:
+                endpoint_override = cls._get_custom_override(endpoint_override)
+
             resp = session.get(uri, endpoint_filter=cls.service,
                                endpoint_override=endpoint_override,
                                headers={"Content-type": "application/json",
@@ -176,6 +186,9 @@ class Resource(resource.Resource):
                                             prepend_key=prepend_key)
             if endpoint_override is None:
                 request.uri = self._get_custom_url(session, request.uri)
+            else:
+                endpoint_override = self._get_custom_override(
+                    endpoint_override)
 
             response = session.put(request.uri, endpoint_filter=self.service,
                                    endpoint_override=endpoint_override,
@@ -185,6 +198,9 @@ class Resource(resource.Resource):
                                             prepend_key=prepend_key)
             if endpoint_override is None:
                 request.uri = self._get_custom_url(session, request.uri)
+            else:
+                endpoint_override = self._get_custom_override(
+                    endpoint_override)
 
             response = session.post(request.uri, endpoint_filter=self.service,
                                     endpoint_override=endpoint_override,
@@ -221,6 +237,8 @@ class Resource(resource.Resource):
         endpoint_override = self.service.get_endpoint_override()
         if endpoint_override is None:
             request.uri = self._get_custom_url(session, request.uri)
+        else:
+            endpoint_override = self._get_custom_override(endpoint_override)
 
         if self.patch_update:
             response = session.patch(request.uri, endpoint_filter=self.service,
@@ -253,6 +271,8 @@ class Resource(resource.Resource):
         endpoint_override = self.service.get_endpoint_override()
         if endpoint_override is None:
             request.uri = self._get_custom_url(session, request.uri)
+        else:
+            endpoint_override = self._get_custom_override(endpoint_override)
 
         response = session.delete(request.uri, endpoint_filter=self.service,
                                   endpoint_override=endpoint_override,
