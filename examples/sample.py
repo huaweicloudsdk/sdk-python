@@ -18,6 +18,17 @@ import time
 
 from openstack import connection
 
+# those services's endpoint will be auto detected from V3 auth token
+#
+#       Nova         ->   ECS
+#       Cinder       ->   EVS
+#       Neutron      ->   VPC
+#       Keystone     ->   IAM
+#       Glance       ->   IMS
+#       Heat         ->   RTS
+#
+# so, we do not need to setup the endpoint override for them.
+
 # setup endpoint override for cloud services
 os.environ.setdefault(
     'OS_CLOUD_EYE_ENDPOINT_OVERRIDE',
@@ -44,6 +55,24 @@ os.environ.setdefault(
     'OS_MAP_REDUCE_ENDPOINT_OVERRIDE',
     'https://mrs.eu-de.otc.t-systems.com/v1.1/%(project_id)s'
 )
+os.environ.setdefault(
+    'OS_CTS_ENDPOINT_OVERRIDE',
+    'https://cts.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+os.environ.setdefault(
+    'OS_SMN_ENDPOINT_OVERRIDE',
+    'https://smn.eu-de.otc.t-systems.com/v2/%(project_id)s')
+os.environ.setdefault(
+    'OS_MAAS_ENDPOINT_OVERRIDE',
+    'https://maas.eu-de.otc.t-systems.com/v1/%(project_id)s')
+os.environ.setdefault(
+    'OS_KMS_ENDPOINT_OVERRIDE',
+    'https://kms.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+os.environ.setdefault(
+    'OS_ANTI_DDOS_ENDPOINT_OVERRIDE',
+    'https://antiddos.eu-de.otc.t-systems.com/v1/%(project_id)s')
+os.environ.setdefault(
+    'OS_DMS_ENDPOINT_OVERRIDE',
+    'https://dms.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
 
 # create connection
 username = "replace-with-your-username"
