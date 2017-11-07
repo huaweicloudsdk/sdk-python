@@ -57,7 +57,7 @@ def send_sms(conn):
         'message': 'FYL',
         'sign_id': '94d3b63a5dfb475994d3ac34664e2346'
     }
-    print(conn.direct_publish(**msg_dict))
+    print(conn.smn.direct_publish(**msg_dict))
 
 
 def operate_topic_attr(conn):
