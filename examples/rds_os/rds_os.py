@@ -17,14 +17,8 @@ Managing rds
 
 
 def list_rds_instances(conn):
-    for i in conn.rds.instances():
+    for i in conn.rds.os_instances():
         print(i)
-
-
-def list_rds_flavors(conn):
-    for f in conn.rds.flavors(dbId='87620726-6802-46c0-9028-a8785e1f1922',
-                              region="eu-de"):
-        print(f)
 
 
 def create_instance(conn):
@@ -54,41 +48,99 @@ def create_instance(conn):
         "dbRtPd": "Test@123"
     }
 
-    print(conn.rds.create_instance(**instance_dict))
+    print(conn.rds.os_create_instance(**instance_dict))
 
 
 def get_instance(conn, i):
     """i could be the instance id of an instance object"""
-    return conn.rds.get_instance(i)
-
-
-def set_instance_params(conn, i):
-    """i could be the instance id of an instance object"""
-    params = {
-        "connect_timeout": 17,
-        "sync_binlog": 1
-    }
-    print(conn.rds.set_instance_params(i, **params))
-
-
-def reset_instance_params(conn, i):
-    """i could be the instance id of an instance object"""
-    print(conn.rds.reset_instance_params(i))
-
-
-def list_instance_errorlog(conn, i):
-    """i could be the instance id of an instance object"""
-    for l in conn.rds.list_instance_errorlog(i,
-                                             startDate="2017-07-11+06:35",
-                                             endDate="2017-07-20+06:35"):
-        print(l)
-
-
-def list_instance_slowlog(conn, i):
-    """i could be the instance id of an instance object"""
-    for l in conn.rds.list_instance_slowlog(i, sftype='UPDATE'):
-        print(l)
+    return conn.rds.os_get_instance(i)
 
 
 def get_flavor(conn, f):
-    print(conn.rds.get_flavor(f))
+    print(conn.rds.os_get_flavor(f))
+
+
+def list_rds_flavors(conn):
+    for f in conn.rds.os_flavors(dbId='87620726-6802-46c0-9028-a8785e1f1922',
+                                 region="eu-de"):
+        print(f)
+
+
+def get_parameters(conn, version_id):
+    """list parameters of a datastore"""
+    for p in conn.rds.os_parameters(version_id):
+        print(p)
+
+
+def get_parameter(conn, version_id, name):
+    """Get parameter of a datastore by name"""
+    print(conn.rds.os_get_parameter(version_id, name))
+
+
+def get_instance_default_configuration(conn, instance):
+    print(conn.rds.os_get_instance_default_configuration(instance))
+
+
+def list_configuration_group(conn):
+    for g in conn.rds.os_list_configuration_group():
+        print(g)
+
+
+def create_configuration_group(conn):
+    group_dict = {
+        "configuration": {
+            "name": "configuration_test",
+            "description": "configuration_test",
+            "values": {
+                "max_connections": "10",
+                "autocommit": "OFF"
+            },
+            "datastore": {
+                "type": "mysql",
+                "version": "5.6"
+            }
+        }
+    }
+
+    print(conn.rds.os_create_configuration_group(**group_dict))
+
+
+def get_configuration_group(conn, cg):
+    print(conn.rds.os_get_configuration_group(cg))
+
+
+def delete_configuration_group(conn, group):
+    conn.rds.os_delete_configuration_group(group)
+
+
+def update_configuration_group(conn, cg):
+
+    update_dict = {
+        "configuration": {
+            "name": "configuration_test",
+            "description": "configuration_test",
+            "values": {
+                "max_connections": "10",
+                "autocommit": "OFF"
+            }
+        }
+    }
+
+    print(conn.rds.os_update_configuration_group(cg, **update_dict))
+
+
+def patch_configuration_group(conn, cg):
+    patch_dict = {
+        "configuration": {
+            "values": {
+                "max_connections": "10",
+                "autocommit": "OFF"
+            }
+        }
+    }
+
+    print(conn.rds.os_patch_configuration_group(cg, **patch_dict))
+
+
+def get_configuration_group_associated_instances(conn, cg):
+    print(conn.rds.os_get_configuration_group_associated_instances(cg))
