@@ -10,11 +10,7 @@ Set environment variable or add these in your application::
 
     os.environ.setdefault(
         'OS_RDS_ENDPOINT_OVERRIDE',
-        'https://rds.eu-de.otc.t-systems.com/rds/v1/%(project_id)s')
+        'https://rds.eu-de.otc.t-systems.com')
 
-RDS service includes OpenStack compatible sdks, these sdks have `os_` prefix,
-to use them, you need to set OS_RDS_ENDPOINT_OVERRIDE as::
-
-    os.environ.setdefault(
-        'OS_RDS_ENDPOINT_OVERRIDE',
-        'https://rds.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+Please be note that RDS service support 2 modes, for OpenStack compatible mode
+sdks, these sdks have `os_` prefix.
