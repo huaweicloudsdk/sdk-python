@@ -9,5 +9,5 @@ below.
 Set environment variable or add these in your application::
 
     os.environ.setdefault(
-        'OS_RDS_OS_ENDPOINT_OVERRIDE',
+        'OS_RDS_ENDPOINT_OVERRIDE',
         'https://rds.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
