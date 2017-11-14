@@ -27,6 +27,8 @@ class Recordset(resource.Resource):
     allow_get = True
     allow_delete = True
 
+    _query_mapping = resource.QueryParameters("zone_type")
+
     #: Properties
     #: The id of the Zone which this recordset belongs to
     zone_id = resource.URI('zone_id')

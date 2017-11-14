@@ -239,7 +239,8 @@ class TestRecordset(TestDNSProxy):
     def test_list_all_recordset(self):
         query = {
             "limit": 20,
-            "marker": "recordset-id"
+            "marker": "recordset-id",
+            "zone_type": "private"
         }
         self.mock_response_json_file_values("list_all_recordset_response.json")
         recordsets = list(self.proxy.all_recordsets(**query))
