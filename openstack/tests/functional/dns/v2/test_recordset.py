@@ -90,7 +90,8 @@ class TestRecordset(base.BaseFunctionalTest):
         self.assertTrue(found)
 
     def test_3_list_all_recordsets(self):
-        recordsets = list(self.conn.dns.all_recordsets(limit=50))
+        recordsets = list(self.conn.dns.all_recordsets(zone_type="private",
+                                                       limit=50))
         found = False
         for recordset in recordsets:
             if recordset.id == self.recordset.id:
