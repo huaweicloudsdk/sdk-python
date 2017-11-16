@@ -115,10 +115,39 @@ class FloatingIP(resource.Resource):
         self._translate_response(response)
         return self
 
+    def update(self, session, prepend_key=True, has_body=True):
+        # floating update requires body to have `enable_L7, traffic_pos_id
+        # http_request_pos_id, cleaning_access_pos_id, app_type_id`
+        # but resource2.py won't put them into body is they are not
+        # dirty
+
+        # The id cannot be dirty for an update
+        self._body._dirty.discard("id")
+
+        # Only try to update if we actually have anything to update.
+        if not any([self._body.dirty, self._header.dirty]):
+            return self
+
+        request = self._prepare_request(prepend_key=prepend_key)
+
+        endpoint_override = self.service.get_endpoint_override()
+
+        for r in ('enable_L7', 'traffic_pos_id', 'http_request_pos_id',
+                  'cleaning_access_pos_id', 'app_type_id'):
+            if not r in request.body:
+                request.body[r] = getattr(self, r)
+
+        response = session.put(request.uri, endpoint_filter=self.service,
+                               endpoint_override=endpoint_override,
+                               json=request.body, headers=request.headers)
+
+        self._translate_response(response, has_body=has_body)
+        return self
+
 
 class TaskStatus(AntiDDosMin):
 
-    base_path = '/antiddos/query_task_status'
+    base_path = '/query_task_status'
 
     _query_mapping = resource.QueryParameters('task_id')
 
