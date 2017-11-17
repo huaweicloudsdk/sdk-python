@@ -57,6 +57,9 @@ def delete_eip(conn):
 
 
 def query_task_status(conn):
+    # query_task_status requires to provide task_id, task_id is only
+    # returned by create_eip, after create_eip, we get a FloatingIP object
+    # get task_id by FloatingIP.task_id
     print(conn.anti_ddos.query_task_status(
         '4a4fefe7-34a1-40e2-a87c-16932af3ac4a'))
 
