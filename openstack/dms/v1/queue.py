@@ -47,6 +47,13 @@ class Queue(_dmsresource.Resource):
     #: Total message number
     #: *Type: int*
     produced_messages = resource.Body('produced_messages', type=int)
+    #: Queue mode
+    queue_mode = resource.Body('queue_mode')
+    #: Redrive policy
+    redrive_policy = resource.Body('redrive_policy')
+     #: Max consume count number
+    #: *Type: int*
+    max_consume_count = resource.Body('max_consume_count', type=int)
 
 
 class Group(_dmsresource.Resource):
