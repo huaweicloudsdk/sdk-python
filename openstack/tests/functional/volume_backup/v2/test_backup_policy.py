@@ -57,11 +57,11 @@ class TestBackupPolicy(base.BaseFunctionalTest):
             if policy.id == self.policy.id:
                 return policy
 
-    def test_list_backup_policies(self):
+    def test_1_list_backup_policies(self):
         policies = list(self.conn.volume_backup.backup_policies())
         self.assertIn(self.policy.name, [p.name for p in policies])
 
-    def test_update_backup_policy(self):
+    def test_2_update_backup_policy(self):
         updated = {
             "scheduled_policy": {
                 "frequency": 5,
@@ -74,7 +74,7 @@ class TestBackupPolicy(base.BaseFunctionalTest):
         self.assertEqual("01:00", policy.scheduled_policy.start_time)
         self.policy = policy
 
-    def test_bind_and_execute(self):
+    def test_3_bind_and_execute(self):
         if self.policy.scheduled_policy.status == "OFF":
             self.conn.volume_backup.enable_policy(self.policy)
 
@@ -82,10 +82,14 @@ class TestBackupPolicy(base.BaseFunctionalTest):
                                                          [self.volume.id])
         self.conn.volume_backup.execute_policy(self.policy)
 
-    def test_enable_disable_policy(self):
+    def test_4_enable_disable_policy(self):
         if self.policy.scheduled_policy.status == "ON":
             self.conn.volume_backup.disable_policy(self.policy)
             policy = self.get_current_policy()
             self.assertEqual("OFF", policy.scheduled_policy.status)
         self.conn.volume_backup.enable_policy(self.policy)
         self.assertEqual("ON", self.policy.scheduled_policy.status)
+
+    def test_5_list_tasks(self):
+        tasks = list(self.conn.volume_backup.tasks(self.policy.id))
+        print tasks
