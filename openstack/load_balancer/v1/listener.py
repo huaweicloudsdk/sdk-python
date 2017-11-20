@@ -171,6 +171,10 @@ class Member(resource.Resource):
     allow_delete = True
     allow_list = True
 
+    _query_mapping = resource.QueryParameters("address", "server_address",
+                                              "server_id", "status",
+                                              "health_status")
+
     #: Properties
     #: Load balancer listener reference of this member
     listener_id = resource.URI("listener_id")

@@ -470,9 +470,17 @@ class TestLoadBalancerListener(TestLoadBalancerProxy):
 
     def test_list_listener_member(self):
         self.mock_response_json_file_values("list_listener_members.json")
-        members = list(self.proxy.listener_members("lid", limit=10))
+        params = {
+            "address": "100.68.1.221",
+            "server_address": "10.208.200.188",
+            "server_id": "945ff5f4-1180-4e9e-bf30-2424f281c2ed",
+            "status": "ACTIVE",
+            "health_status": "ABNORMAL",
+            "limit": 10
+        }
+        members = list(self.proxy.listener_members("lid", **params))
         self.assert_session_list_with("/elbaas/listeners/lid/members",
-                                      params={"limit": 10})
+                                      params=params)
         self.assertEqual(2, len(members))
         member = members[0]
         self.assertIsInstance(member, _listener.Member)
