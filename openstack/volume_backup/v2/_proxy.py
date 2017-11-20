@@ -13,6 +13,7 @@ from openstack import proxy2
 from openstack.volume_backup.v2 import backup as _backup
 from openstack.volume_backup.v2 import backup_policy as _backup_policy
 from openstack.volume_backup.v2 import backup_task as _backup_task
+from openstack.volume_backup.v2 import job as _job
 
 
 class Proxy(proxy2.BaseProxy):
@@ -299,3 +300,13 @@ class Proxy(proxy2.BaseProxy):
                                            backup_policy)
         query["policy_id"] = backup_policy.id
         return self._list(_backup_task.BackupTask, paginated=True, **query)
+
+    def get_job(self, job):
+        """Get a job detail
+
+        :param job: The value can be the ID of a job
+             or a :class:`~openstack.volume_backup.v1.job.Job` instance.
+        :returns: Backup instance
+        :rtype: :class:`~openstack.volume_backup.v1.job.Job`
+        """
+        return self._get(_job.Job, job)
