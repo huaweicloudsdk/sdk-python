@@ -125,7 +125,7 @@ class Server(resource2.Resource, metadata.MetadataMixin):
     #: instance. This is typically used for booting servers from volumes.
     block_device_mapping = resource2.Body('block_device_mapping_v2')
     #: The dictionary of data to send to the scheduler.
-    scheduler_hints = resource2.Body('OS-SCH-HNT:scheduler_hints', type=dict)
+    scheduler_hints = resource2.Body('os:scheduler_hints', type=dict)
     #: A networks object. Required parameter when there are multiple
     #: networks defined for the tenant. When you do not specify the
     #: networks parameter, the server attaches to the only network
@@ -138,6 +138,9 @@ class Server(resource2.Resource, metadata.MetadataMixin):
     #: instance name template. Appears in the response for administrative users
     #: only.
     instance_name = resource2.Body('OS-EXT-SRV-ATTR:instance_name')
+
+    min_count = resource2.Body("min_count")
+    max_count = resource2.Body("max_count")
 
     def _prepare_request(self, requires_id=True, prepend_key=True):
         request = super(Server, self)._prepare_request(requires_id=requires_id,
@@ -164,7 +167,7 @@ class Server(resource2.Resource, metadata.MetadataMixin):
         # resource_key scope like everything else. If we try to send
         # scheduler_hints, pop them out of the resource_key scope and into
         # their own top-level scope.
-        hint_key = "OS-SCH-HNT:scheduler_hints"
+        hint_key = "os:scheduler_hints"
         if hint_key in server_body:
             request.body[hint_key] = server_body.pop(hint_key)
 
