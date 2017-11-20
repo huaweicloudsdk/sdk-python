@@ -108,6 +108,21 @@ def consume_message(conn, queue):
         print(conn.dms.ack_consumed_message(cm))
 
 
+# Consume message by tag list in queue and group
+def consume_message_with_tags(conn, qui, gid):
+    #qid = '673f8fca-9aa1-4974-8fc5-b0eb1c5f9724'
+    #gid = 'g-a826e437-2e67-46c7-b220-63836b5bb463'
+    params = {
+        'max_msgs': 10,
+        'time_wait': 30,
+        'tags': ['tag1', 'tag2'],
+        'tag_type': 'or'
+    }
+
+    for c in conn.dms.consume_message(qid, gid, **params):
+        print(c)
+
+
 def get_quotas(conn):
 
     for q in conn.dms.quotas():
