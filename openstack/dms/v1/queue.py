@@ -167,19 +167,60 @@ class MessageConsume(resource.Resource):
     #: *Type: int
     fail = resource.Body('fail', type=int)
 
+    # NOTES: this API is so different from others, it's not a RESTFUL
+    # style, allow user to pass mulitple tags as the query parameters
+    # which can not leverage method of session directlly.
+    # return an url with query params
+    # it accepts multiple query params e.g. tag=tag1&tag=tag2
+    # S-u-c-k-s, huh !
+    @classmethod
+    def _assemble_query_params(cls, base_url, params):
+        # pop queue_id and consumer_group_id
+        params.pop('queue_id', None)
+        params.pop('consumer_group_id', None)
+        if len(params) == 0:
+            return base_url
+        base_url = base_url + '?'
+        for (p, v) in params.items():
+            if p == 'tags':
+                for tag in v:
+                    base_url = base_url + 'tag=' + tag + '&'
+            else:
+                base_url = base_url + p + '=' + str(v) + '&'
+
+        # remove last `&`
+        return base_url[:-1]
+
     # use get method to consume message, return a list of self
     @classmethod
     def list(cls, session, paginated=False, **params):
-        query_params = cls._query_mapping._transpose(params)
-        uri = cls.base_path % params
+
         headers = {"Accept": "application/json",
                    "Content-type": "application/json"}
-
+        uri = cls.base_path % params
         endpoint_override = cls.service.get_endpoint_override()
-        resp = session.get(uri, endpoint_filter=cls.service,
-                           endpoint_override=endpoint_override,
-                           headers=headers,
-                           params=query_params)
+
+        tags = params.get("tags", None)
+        # NOTES: this API is so different from others, it's not a RESTFUL
+        # style, allow user to pass mulitple tags as the query parameters
+        # which can not leverage method of session directlly.
+        if tags is not None:
+            if endpoint_override is not None:
+                uri = cls._assemble_query_params(uri, params)
+                full_url = endpoint_override % {'project_id':
+                                                session.get_project_id()}
+                full_url = full_url + uri
+                resp = session.get(full_url, endpoint_filter=cls.service,
+                                   headers=headers)
+            else:
+                # TOOD: Don't support non override yet
+                resp = None
+        else:
+            query_params = cls._query_mapping._transpose(params)
+            resp = session.get(uri, endpoint_filter=cls.service,
+                               endpoint_override=endpoint_override,
+                               headers=headers,
+                               params=query_params)
 
         if resp is not None:
             resp = resp.json()
