@@ -16,7 +16,7 @@ from openstack.rds.v1 import datastore as _datastore
 from openstack.rds.v1 import flavor as _flavor
 from openstack.rds.v1 import instance as _instance
 
-# Notes(eliqiao): for rds_os service type, we reuse rds service type, but keep
+# Notes: for rds_os service type, we reuse rds service type, but keep
 # rds_os resource still in itself folder to make things easy to check/read.
 from openstack.rds_os.v1 import configuration as _os_configuration
 from openstack.rds_os.v1 import datastore as _os_datastore
@@ -368,7 +368,7 @@ class Proxy(proxy2.BaseProxy):
         return self._get(_datastore.Parameter, name,
                          datastore_version_id=datastore_version_id)
 
-    # Notes(eliqiao): Belows are for rds_os proxy, adding os_ prefix.
+    # Notes: Belows are for rds_os proxy, adding os_ prefix.
     def os_instances(self):
         """List instances
 
