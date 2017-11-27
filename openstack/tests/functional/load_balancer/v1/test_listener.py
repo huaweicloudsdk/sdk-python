@@ -119,7 +119,7 @@ class TestListener(base.BaseFunctionalTest):
         added_members = self.conn.load_balancer.listener_members(self.listener)
         self.assertEqual(2, len(list(added_members)))
 
-        member_ids = [member["server_id"] for member in members]
+        member_ids = [member["id"] for member in members]
         job = self.conn.load_balancer.remove_members_of_listener(self.listener,
                                                                  member_ids)
         job = _job.Job(id=job.id)
