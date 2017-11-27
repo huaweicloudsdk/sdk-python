@@ -383,7 +383,7 @@ class Proxy(proxy2.BaseProxy):
         :param listener: Either the ID of a listener or an instance of
                 :class:`~openstack.load_balancer.v1.listener.Listener`
         :param members: member list to be removed from listener,
-            list of members (ECS server id) belongs to the listener
+            list of member id belongs to the listener
             ["dbecb618-2259-405f-ab17-9b68c4f541b0",] for example.
 
         :return: a operate member job
