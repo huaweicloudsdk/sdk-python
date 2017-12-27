@@ -54,7 +54,7 @@ class Tracker(ctsresource.Resource):
 
         return cls.existing(**resp)
 
-    def delete(self, session):
+    def delete(self, session, params=None, has_body=False):
 
         params = {'tracker_name': self.tracker_name}
 
