@@ -378,7 +378,7 @@ class Resource(object):
                         fields[component.name] = component
 
         relevant_attrs = {}
-        attr_keys = attrs.keys()
+        attr_keys = list(attrs.keys())
         for key in attr_keys:
             if key in fields:
                 field = fields[key]
