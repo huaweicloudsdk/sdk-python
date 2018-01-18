@@ -35,7 +35,7 @@ class MetricData(resource.Resource):
     #: ttl, metric data TTL, max value is: 604800
     ttl = resource.Body('ttl', type=int)
     #: collect time
-    collect_time = resource.Body('collect_time', type=long)
+    collect_time = resource.Body('collect_time')
     #: value
     value = resource.Body('value')
     #: value type, valid values includes: ``int``, ``float``
