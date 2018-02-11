@@ -16,9 +16,13 @@ Copyright
 ---------
 
 Copyright 2017 HuaWei Tld
+
 Copyright 2017 OpenStack.org
+
 Copyright 2010 Jacob Kaplan-Moss
+
 Copyright 2011 Nebula, Inc.
+
 2. Grant of Copyright License. Subject to the terms and conditions of
 copyright license to reproduce, prepare Derivative Works of,
 publicly display, publicly perform, sublicense, and distribute the
