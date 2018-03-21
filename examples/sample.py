@@ -29,64 +29,73 @@ from openstack import connection
 #
 # so, we do not need to setup the endpoint override for them.
 
+
 # setup endpoint override for cloud services
+# "example" in the endpoint stands for "Region.Cloud"
 os.environ.setdefault(
     'OS_CLOUD_EYE_ENDPOINT_OVERRIDE',
-    'https://ces.eu-de.otc.t-systems.com/V1.0/%(project_id)s'
+    'https://ces.example.com/V1.0/%(project_id)s'
 )
+
+
+# endpoint override for the other service
+# "example" in the endpoint stands for "Region.Cloud"
+"""
 os.environ.setdefault(
     'OS_AUTO_SCALING_ENDPOINT_OVERRIDE',
-    ('https://as.eu-de.otc.t-systems.com'
+    ('https://as.example.com'
      '/autoscaling-api/v1/%(project_id)s')
 )
-# os.environ.setdefault(
-#     'OS_DNS_ENDPOINT_OVERRIDE',
-#     'https://dns.eu-de.otc.t-systems.com/v2'
-# )
+os.environ.setdefault(
+    'OS_DNS_ENDPOINT_OVERRIDE',
+    'https://dns.example.com/v2'
+)
 os.environ.setdefault(
     'OS_VOLUME_BACKUP_ENDPOINT_OVERRIDE',
-    'https://vbs.eu-de.otc.t-systems.com/v2/%(project_id)s'
+    'https://vbs.example.com/v2/%(project_id)s'
 )
 os.environ.setdefault(
     'OS_LOAD_BALANCER_ENDPOINT_OVERRIDE',
-    'https://elb.eu-de.otc.t-systems.com/v1.0/%(project_id)s'
+    'https://elb.example.com/v1.0/%(project_id)s'
 )
 os.environ.setdefault(
     'OS_MAP_REDUCE_ENDPOINT_OVERRIDE',
-    'https://mrs.eu-de.otc.t-systems.com/v1.1/%(project_id)s'
+    'https://mrs.example.com/v1.1/%(project_id)s'
 )
 os.environ.setdefault(
     'OS_CTS_ENDPOINT_OVERRIDE',
-    'https://cts.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+    'https://cts.example.com/v1.0/%(project_id)s')
 os.environ.setdefault(
     'OS_SMN_ENDPOINT_OVERRIDE',
-    'https://smn.eu-de.otc.t-systems.com/v2/%(project_id)s')
+    'https://smn.example.com/v2/%(project_id)s')
 os.environ.setdefault(
     'OS_MAAS_ENDPOINT_OVERRIDE',
-    'https://maas.eu-de.otc.t-systems.com/v1/%(project_id)s')
+    'https://maas.example.com/v1/%(project_id)s')
 os.environ.setdefault(
     'OS_KMS_ENDPOINT_OVERRIDE',
-    'https://kms.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+    'https://kms.example.com/v1.0/%(project_id)s')
 os.environ.setdefault(
     'OS_ANTI_DDOS_ENDPOINT_OVERRIDE',
-    'https://antiddos.eu-de.otc.t-systems.com/v1/%(project_id)s')
+    'https://antiddos.example.com/v1/%(project_id)s')
 os.environ.setdefault(
     'OS_DMS_ENDPOINT_OVERRIDE',
-    'https://dms.eu-de.otc.t-systems.com/v1.0/%(project_id)s')
+    'https://dms.example.com/v1.0/%(project_id)s')
+"""
+
 
 # create connection
 username = "replace-with-your-username"
 password = "replace-with-your-password"
 projectId = "replace-with-your-project-id"
 userDomainId = "replace-with-your-user-domain-id"
-auth_url = "https://iam.eu-de.otc.t-systems.com/v3"
+auth_url = "https://iam.example.com/v3"
 conn = connection.Connection(auth_url=auth_url,
                              user_domain_id=userDomainId,
                              project_id=projectId,
                              username=username,
                              password=password)
 
-# some common constant required by toturial
+# some common constant required by tutorial
 now = datetime.datetime.now()
 dimensions = [{
     "name": "instance_id",
