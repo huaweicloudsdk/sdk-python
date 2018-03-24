@@ -122,7 +122,7 @@ class TestTaskStatus(testtools.TestCase):
     def test_basic(self):
 
         sot = antiddos.TaskStatus()
-        self.assertEqual('/antiddos/query_task_status', sot.base_path)
+        self.assertEqual('/query_task_status', sot.base_path)
 
     def test_make_it(self):
 
