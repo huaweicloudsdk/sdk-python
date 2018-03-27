@@ -56,4 +56,4 @@ ChangeLog
 .temp.py
 /.vscode/
 examples/sample2.py
-/examples/sample3.py
+examples/sample3.py
