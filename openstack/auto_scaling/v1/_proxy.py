@@ -10,13 +10,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from openstack import proxy2
 from openstack.auto_scaling.v1 import activity as _activity
 from openstack.auto_scaling.v1 import config as _config
 from openstack.auto_scaling.v1 import group as _group
 from openstack.auto_scaling.v1 import instance as _instance
+from openstack.auto_scaling.v1 import lifecycle_hook as _lifecycle_hook
 from openstack.auto_scaling.v1 import policy as _policy
 from openstack.auto_scaling.v1 import quota as _quota
-from openstack import proxy2
 
 
 class Proxy(proxy2.BaseProxy):
@@ -430,3 +431,103 @@ class Proxy(proxy2.BaseProxy):
                               scaling_group_id=group.id)
         else:
             return self._list(_quota.Quota, paginated=False)
+
+    def create_lifecycle_hook(self, group, **attrs):
+        """Create a new lifecycle hook from a group name and attributes
+
+        :param group: auto scaling group name
+        :param dict attrs: Keyword arguments which will be used to create
+                a :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`,
+                comprised of the properties on the LifecycleHookBase class.
+        :returns: The results of lifecycle hook creation
+        :rtype: :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`
+        """
+        group = self._get_resource(_group.Group, group)
+        return self._create(_lifecycle_hook.LifecycleHookBase, prepend_key=False, scaling_group_id=group.id, **attrs)
+
+    def lifecycle_hooks(self, group):
+        """Retrieve a generator of lifecycle hooks
+
+        :param group: auto scaling group name
+        :returns: A generator of lifecycle hook
+                  (:class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookList`) instances
+        """
+        group = self._get_resource(_group.Group, group)
+        return self._list(_lifecycle_hook.LifecycleHookList, paginated=False, scaling_group_id=group.id)
+
+    def get_lifecycle_hook(self, group, lifecycle_hook):
+        """Get a lifecycle hook
+
+        :param group: The value can be the ID of a group
+             or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+        :param lifecycle_hook: The value can be the ID of a lifecycle hook
+             or a :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase` instance.
+        :returns: lifecycle hook instance
+        :rtype: :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`
+        """
+        group = self._get_resource(_group.Group, group)
+        return self._find(_lifecycle_hook.LifecycleHookBase, lifecycle_hook, ignore_missing=True,
+                          scaling_group_id=group.id)
+
+    def update_lifecycle_hook(self, group, lifecycle_hook, **attrs):
+        """update lifecycle hook with attributes
+
+        :param group: The value can be the ID of a group
+             or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+        :param lifecycle_hook: The value can be the ID of a lifecycle hook
+             or a :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase` instance.
+        :param dict attrs: Keyword arguments which will be used to create
+                           a :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`,
+                           comprised of the properties on the LifecycleHookBase class.
+        :returns: The results of lifecycle hook creation
+        :rtype: :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`
+        """
+        group = self._get_resource(_group.Group, group)
+        return self._update(_lifecycle_hook.LifecycleHookBase, lifecycle_hook, prepend_key=False,
+                            scaling_group_id=group.id, **attrs)
+
+    def delete_lifecycle_hook(self, group, lifecycle_hook):
+        """Delete a lifecycle hook
+
+        :param group: The value can be the ID of a group
+             or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+        :param lifecycle_hook: The value can be the ID of a lifecycle hook
+             or a :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase` instance.
+
+        :returns: lifecycle hook been deleted
+        :rtype: :class:`~openstack.auto_scaling.v2.lifecycle_hook.LifecycleHookBase`
+        """
+        group = self._get_resource(_group.Group, group)
+        return self._delete(_lifecycle_hook.LifecycleHookBase, lifecycle_hook, ignore_missing=True,
+                            scaling_group_id=group.id)
+
+    def call_back_instance(self, group, **attrs):
+        '''
+
+        :param group: The value can be the ID of a group
+             or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+        :param attrs: Keyword arguments which will be used to create
+                    a :class:`~openstack.auto_scaling.v2.lifecycle_hook.InstanceHook`,
+                    comprised of the properties on the InstanceHook class.
+        :return: the instance of InstanceHook
+        :rtype: :class:`~openstack.auto_scaling.v2.lifecycle_hook.InstanceHook`
+
+        '''
+
+        group = self._get_resource(_group.Group, group)
+        instance = _lifecycle_hook.InstanceHook(scaling_group_id=group.id)
+        return instance.call_back(self._session, **attrs)
+
+    def get_group_hanging_instance(self, group, **query):
+        """Retrieve a generator of hanging instances from a group
+        :param group: The value can be the ID of a group
+             or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+        :param dict query: Optional query parameters to be sent to limit the
+                      resources being returned.
+
+        :returns: A generator of hanging instances
+                  (:class:`~openstack.auto_scaling.v2.lifecycle_hook.InstanceHookList`) instances
+        """
+        group = self._get_resource(_group.Group, group)
+        query["scaling_group_id"] = group.id
+        return self._list(_lifecycle_hook.InstanceHookList, paginated=False, **query)
