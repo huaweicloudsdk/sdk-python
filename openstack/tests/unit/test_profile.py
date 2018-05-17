@@ -22,6 +22,7 @@ class TestProfile(base.TestCase):
             'anti-ddos',
             'auto-scaling',
             'baremetal',
+            'cdn',
             'cloud-eye',
             'clustering',
             'compute',
