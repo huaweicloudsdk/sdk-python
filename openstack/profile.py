@@ -63,6 +63,7 @@ from openstack.anti_ddos import anti_ddos_service
 from openstack.auto_scaling import auto_scaling_service
 from openstack.bare_metal import bare_metal_service
 from openstack.block_store import block_store_service
+from openstack.cdn import cdn_service
 from openstack.cloud_eye import cloud_eye_service
 from openstack.cluster import cluster_service
 from openstack.compute import compute_service
@@ -145,6 +146,7 @@ class Profile(object):
         vbs_v2 = volume_backup_service.VolumeBackupService(version="v2")
         self._add_service(vbs_v2)
         self._add_service(map_reduce_service.MapReduceService(version="v1"))
+        self._add_service(cdn_service.CDNService(version='v1'))
 
         if plugins:
             for plugin in plugins:
