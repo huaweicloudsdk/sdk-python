@@ -86,8 +86,8 @@ class Limits(resource2.Resource):
         :rtype: :class:`~openstack.compute.v2.limits.Limits`
         """
         request = self._prepare_request(requires_id=False, prepend_key=False)
-
-        response = session.get(request.uri, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        response = session.get(request.uri, endpoint_filter=self.service, endpoint_override = endpoint_override)
 
         body = response.json()
         body = body[self.resource_key]

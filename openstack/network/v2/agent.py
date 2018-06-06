@@ -70,25 +70,29 @@ class Agent(resource.Resource):
     def add_agent_to_network(self, session, network_id):
         body = {'network_id': network_id}
         url = utils.urljoin(self.base_path, self.id, 'dhcp-networks')
-        resp = session.post(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.post(url, endpoint_filter=self.service, endpoint_override = endpoint_override,json=body)
         return resp.json()
 
     def remove_agent_from_network(self, session, network_id):
         body = {'network_id': network_id}
         url = utils.urljoin(self.base_path, self.id, 'dhcp-networks',
                             network_id)
-        session.delete(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        session.delete(url, endpoint_filter=self.service, endpoint_override = endpoint_override ,json=body)
 
     def add_router_to_agent(self, session, router):
         body = {'router_id': router}
         url = utils.urljoin(self.base_path, self.id, 'l3-routers')
-        resp = session.post(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.post(url, endpoint_filter=self.service, endpoint_override = endpoint_override, json=body)
         return resp.json()
 
     def remove_router_from_agent(self, session, router):
         body = {'router_id': router}
         url = utils.urljoin(self.base_path, self.id, 'l3-routers', router)
-        session.delete(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        session.delete(url, endpoint_filter=self.service, endpoint_override = endpoint_override ,json=body)
 
 
 class NetworkHostingDHCPAgent(Agent):

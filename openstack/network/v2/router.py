@@ -85,7 +85,8 @@ class Router(resource.Resource):
         :returns: The body of the response as a dictionary.
         """
         url = utils.urljoin(self.base_path, self.id, 'add_router_interface')
-        resp = session.put(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.put(url, endpoint_filter=self.service, endpoint_override = endpoint_override ,json=body)
         return resp.json()
 
     def remove_interface(self, session, **body):
@@ -98,7 +99,8 @@ class Router(resource.Resource):
         :returns: The body of the response as a dictionary.
         """
         url = utils.urljoin(self.base_path, self.id, 'remove_router_interface')
-        resp = session.put(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.put(url, endpoint_filter=self.service,  endpoint_override = endpoint_override ,json=body)
         return resp.json()
 
     def add_gateway(self, session, **body):
@@ -112,7 +114,8 @@ class Router(resource.Resource):
         """
         url = utils.urljoin(self.base_path, self.id,
                             'add_gateway_router')
-        resp = session.put(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.put(url, endpoint_filter=self.service, endpoint_override = endpoint_override, json=body)
         return resp.json()
 
     def remove_gateway(self, session, **body):
@@ -126,7 +129,8 @@ class Router(resource.Resource):
         """
         url = utils.urljoin(self.base_path, self.id,
                             'remove_gateway_router')
-        resp = session.put(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.put(url, endpoint_filter=self.service,endpoint_override = endpoint_override ,json=body)
         return resp.json()
 
 

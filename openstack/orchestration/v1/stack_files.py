@@ -36,4 +36,5 @@ class StackFiles(resource.Resource):
         # The stack files response contains a map of filenames and file
         # contents.
         request = self._prepare_request(requires_id=False)
-        return session.get(request.uri, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        return session.get(request.uri, endpoint_filter=self.service, endpoint_override = endpoint_override)

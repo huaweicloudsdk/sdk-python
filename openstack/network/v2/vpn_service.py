@@ -49,3 +49,110 @@ class VPNService(resource.Resource):
     status = resource.Body('status')
     #: The ID of the subnet on which the tenant wants the vpnservice.
     subnet_id = resource.Body('subnet_id')
+
+
+class IPSecPolicy(resource.Resource):
+    resource_key = 'ipsecpolicy'
+    resources_key = 'ipsecpolicies'
+    base_path = '/vpn/ipsecpolicies'
+    service = network_service.NetworkService()
+
+    # capabilities
+    allow_create = True
+    allow_get = True
+    allow_update = True
+    allow_delete = True
+    allow_list = True
+    name = resource.Body('name')
+    transform_protocol = resource.Body('transform_protocol')
+    auth_algorithm = resource.Body('auth_algorithm')
+    pfs = resource.Body('pfs')
+    description = resource.Body('description')
+    encapsulation_mode = resource.Body('encapsulation_mode')
+    encryption_algorithm = resource.Body('encryption_algorithm')
+    lifetime = resource.Body('lifetime')
+    tenant_id = resource.Body('project_id')
+    value = resource.Body('value')
+    units = resource.Body('units')
+
+
+class IKEPolicy(resource.Resource):
+    resource_key = 'ikepolicy'
+    resources_key = 'ikepolicies'
+    base_path = 'vpn/ikepolicies'
+    service = network_service.NetworkService()
+
+    allow_create = True
+    allow_get = True
+    allow_update = True
+    allow_delete = True
+    allow_list = True
+
+    name = resource.Body('name')
+    auth_algorithm = resource.Body('auth_algorithm')
+    description = resource.Body('description')
+    encryption_algorithm = resource.Body('encryption_algorithm')
+    ike_version = resource.Body('ike_version')
+    lifetime = resource.Body('lifetime')
+    pfs = resource.Body('pfs')
+    phase1_negotiation_mode = resource.Body('phase1_negotiation_mode')
+    value = resource.Body('value')
+    units = resource.Body('units')
+    tenant_id = resource.Body('project_id')
+
+
+class EndPointGroup(resource.Resource):
+    resource_key = 'endpoint_group'
+    resources_key = 'endpoint_groups'
+    base_path = 'vpn/endpoint-groups'
+    service = network_service.NetworkService()
+
+    allow_create = True
+    allow_get = True
+    allow_update = True
+    allow_delete = True
+    allow_list = True
+
+    name = resource.Body('name')
+    endpoints = resource.Body('endpoints')
+    type = resource.Body('type')
+    description = resource.Body('description')
+    tenant_id = resource.Body('project_id')
+
+
+class VPNConnetion(resource.Resource):
+    resource_key = 'ipsec_site_connection'
+    resources_key = 'ipsec_site_connections'
+    base_path = 'vpn/ipsec-site-connections'
+    service = network_service.NetworkService()
+
+    allow_create = True
+    allow_get = True
+    allow_update = True
+    allow_delete = True
+    allow_list = True
+
+    name = resource.Body('name')
+    description = resource.Body('description')
+    tenant_id = resource.Body('project_id')
+    dpd = resource.Body('dpd')
+    timeout = resource.Body('timeout')
+    action = resource.Body('action')
+    local_id = resource.Body('local_id')
+    psk = resource.Body('psk')
+    initiator = resource.Body('initiator')
+    ipsecpolicy_id = resource.Body('ipsecpolicy_id')
+    admin_state_up = resource.Body('admin_state_up', type=bool)
+    mtu = resource.Body('mtu')
+    peer_ep_group_id = resource.Body('peer_ep_group_id')
+    ikepolicy_id = resource.Body('ikepolicy_id')
+    vpnservice_id = resource.Body('vpnservice_id')
+    local_ep_group_id = resource.Body('local_ep_group_id')
+    peer_address = resource.Body('peer_address')
+    peer_id = resource.Body('peer_id')
+    auth_mode = resource.Body('auth_mode')
+    peer_cidrs = resource.Body('peer_cidrs')
+    interval = resource.Body('interval')
+    route_mode = resource.Body('route_mode')
+    status = resource.Body('status')
+    type = resource.Body('type')

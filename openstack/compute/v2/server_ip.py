@@ -40,8 +40,8 @@ class ServerIP(resource2.Resource):
 
         if network_label is not None:
             url = utils.urljoin(url, network_label)
-
-        resp = session.get(url, endpoint_filter=cls.service)
+        endpoint_override = cls.service.get_endpoint_override()
+        resp = session.get(url, endpoint_filter=cls.service, endpoint_override = endpoint_override)
         resp = resp.json()
 
         if network_label is None:

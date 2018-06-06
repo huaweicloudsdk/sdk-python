@@ -16,8 +16,10 @@ from openstack.auto_scaling.v1 import config as _config
 from openstack.auto_scaling.v1 import group as _group
 from openstack.auto_scaling.v1 import instance as _instance
 from openstack.auto_scaling.v1 import lifecycle_hook as _lifecycle_hook
+from openstack.auto_scaling.v1 import notification as _notification
 from openstack.auto_scaling.v1 import policy as _policy
 from openstack.auto_scaling.v1 import quota as _quota
+from openstack.auto_scaling.v1 import tag as _tag
 
 
 class Proxy(proxy2.BaseProxy):
@@ -531,3 +533,76 @@ class Proxy(proxy2.BaseProxy):
         group = self._get_resource(_group.Group, group)
         query["scaling_group_id"] = group.id
         return self._list(_lifecycle_hook.InstanceHookList, paginated=False, **query)
+
+    # def get_tags(self):
+    #     """Retrieve a generator of scaling group type tags
+    #
+    #     :returns: A generator of hanging instances
+    #               (:class:`~openstack.auto_scaling.v2.tag.BaseTag`) instances
+    #     """
+    #     return self._list(_tag.BaseTag, paginated=False)
+    #
+    # def get_group_tags(self, group):
+    #     """Retrieve a generator of scaling group type tags
+    #     :param group: The value can be the ID of a group
+    #          or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+    #
+    #     :returns: A generator of GroupTag instances
+    #               (:class:`~openstack.auto_scaling.v2.tag.GroupTag`) instances
+    #     """
+    #     group = self._get_resource(_group.Group, group)
+    #     return self._list(_tag.GroupTag, paginated=False, group_id=group.id)
+    #
+    # def tag_action(self, group, **attrs):
+    #     """do action of a new tag from a group name and attributes
+    #
+    #     :param group: auto scaling group name
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #             a :class:`~openstack.auto_scaling.v2.tag.TagAction`,
+    #             comprised of the properties on the TagAction class.
+    #     :returns: The results of tag action
+    #     :rtype: :class:`~openstack.auto_scaling.v2.tag.TagAction`
+    #     """
+    #     group = self._get_resource(_group.Group, group)
+    #     tag_action = _tag.TagAction(group_id=group.id)
+    #     return tag_action.tag_action(self._session, **attrs)
+    #
+    # def create_notification(self, group, **data):
+    #     """Create a new notification from group name and attributes
+    #
+    #     :param group: auto scaling group name
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #             a :class:`~openstack.auto_scaling.v2.notification.CreateNotification`,
+    #             comprised of the properties on the CreateNotification class.
+    #     :returns: The results of notification creation
+    #     :rtype: :class:`~openstack.auto_scaling.v2.notification.CreateNotification`
+    #     """
+    #     group = self._get_resource(_group.Group, group)
+    #     notification = _notification.CreateNotification(scaling_group_id=group.id)
+    #     return notification.create_notification(self._session, **data)
+    #
+    # def notifications(self, group):
+    #     """Retrieve a generator of Notification
+    #
+    #     :param group: The value can be the ID of a group or a
+    #         :class:`~openstack.auto_scaling.v2.group.Group` instance.
+    #     :returns: A generator of quota (:class:`~openstack.auto_scaling.v2.
+    #                 notification.Notification`) instances
+    #     """
+    #     group = self._get_resource(_group.Group, group)
+    #     return self._list(_notification.Notification, paginated=False, scaling_group_id=group.id)
+    #
+    # def delete_notification(self, group, topic):
+    #
+    #     """Delete a notification topic from a group
+    #
+    #     :param group: The value can be the ID of a group
+    #          or a :class:`~openstack.auto_scaling.v2.group.Group` instance.
+    #     :param topic: The value can be the ID of a topic
+    #     :returns: topic will be removed from a group
+    #     :rtype: :class:`~openstack.auto_scaling.v2.notification.DeleteNotification`
+    #     """
+    #
+    #     group = self._get_resource(_group.Group, group)
+    #     notification = _notification.DeleteNotification(scaling_group_id=group.id, topic_urn=topic)
+    #     return notification.delete_notification(self._session)
