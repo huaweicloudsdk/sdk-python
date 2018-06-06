@@ -424,17 +424,17 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._update(_server.Server, server, **attrs)
 
-    def change_server_password(self, server, new_password):
-        """Change the administrator password
-
-        :param server: Either the ID of a server or a
-                       :class:`~openstack.compute.v2.server.Server` instance.
-        :param str new_password: The new password to be set.
-
-        :returns: None
-        """
-        server = self._get_resource(_server.Server, server)
-        server.change_password(self._session, new_password)
+    # def change_server_password(self, server, new_password):
+    #     """Change the administrator password
+    #
+    #     :param server: Either the ID of a server or a
+    #                    :class:`~openstack.compute.v2.server.Server` instance.
+    #     :param str new_password: The new password to be set.
+    #
+    #     :returns: None
+    #     """
+    #     server = self._get_resource(_server.Server, server)
+    #     server.change_password(self._session, new_password)
 
     def reset_server_state(self, server, state):
         """Reset the state of server
