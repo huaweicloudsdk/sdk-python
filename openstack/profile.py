@@ -83,6 +83,7 @@ from openstack.orchestration import orchestration_service
 from openstack.smn import smn_service
 from openstack.volume_backup import volume_backup_service
 from openstack.vpc import vpc_service
+from openstack.bms import bms_service
 
 # from openstack.key_manager import key_manager_service
 # from openstack.bare_metal import bare_metal_service
@@ -137,6 +138,7 @@ class Profile(object):
         self._add_service(ass)
         vbs_v2 = volume_backup_service.VolumeBackupService(version="v2")
         self._add_service(vbs_v2)
+		self._add_service(bms_service.BmsService(version='v1'))
         self._add_service(map_reduce_service.MapReduceService(version="v1"))
         self._add_service(cdn_service.CDNService(version='v1'))
         self._add_service(evs_service.EvsServiceV2_1(version='v2.1'))
