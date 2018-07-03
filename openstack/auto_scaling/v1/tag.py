@@ -30,7 +30,7 @@ class BaseTag(resource.Resource):
     allow_list = True
     tag = resource.Body('tags')
     key = resource.Body("key")
-    values = resource.Body('values')
+    value = resource.Body('value')
 
 
 class GroupTag(BaseTag):
@@ -49,7 +49,7 @@ class TagAction(GroupTag):
 
         request = self._prepare_request(requires_id=False)
         endpoint_override = self.service.get_endpoint_override()
-        super(TagAction, self).create(session, )
+        #super(TagAction, self).create(session, )
         response = session.post(request.uri, endpoint_filter=self.service,
                                 endpoint_override=endpoint_override,
                                 json=attrs, headers=request.headers)

@@ -91,7 +91,7 @@ from openstack.bms import bms_service
 # from openstack.database import database_service
 # from openstack.message import message_service
 # from openstack.object_store import object_store_service
-# from openstack.rds import rds_service
+from openstack.rds import rds_service
 # from openstack.rds_os import rds_os_service
 # from openstack.telemetry.alarm import alarm_service
 # from openstack.telemetry import telemetry_service
@@ -125,11 +125,9 @@ class Profile(object):
         self._add_service(identity_service.IdentityService(version="v3"))
         self._add_service(image_service.ImageService(version="v2"))
         self._add_service(kms_service.KMSService(version="v1"))
-        self._add_service(lb_service.LoadBalancerService(version="v1"))
         self._add_service(maas_service.MaaSService(version="v1"))
         self._add_service(network_service.NetworkService(version="v2.0"))
-        self._add_service(
-            orchestration_service.OrchestrationService(version="v1"))
+        self._add_service(orchestration_service.OrchestrationService(version="v1"))
         self._add_service(smn_service.SMNService(version="v2"))
         # QianBiao.NG HuaWei Services
         self._add_service(dns_service.DNSService(version="v2"))
@@ -138,14 +136,14 @@ class Profile(object):
         self._add_service(ass)
         vbs_v2 = volume_backup_service.VolumeBackupService(version="v2")
         self._add_service(vbs_v2)
-        self._add_service(bms_service.BmsService(version='v1'))
         self._add_service(map_reduce_service.MapReduceService(version="v1"))
-        self._add_service(cdn_service.CDNService(version='v1'))
         self._add_service(evs_service.EvsServiceV2_1(version='v2.1'))
         self._add_service(evs_service.EvsService(version='v2'))
         self._add_service(ecs_service.EcsService(version='v1'))
         self._add_service(ecs_service.EcsServiceV1_1(version='v1.1'))
         self._add_service(vpc_service.VpcService(version='v2.0'))
+        self._add_service(bms_service.BmsService(version='v1'))
+        self._add_service(lb_service.LoadBalancerService(version='v1'))
         # not support below service
         # self._add_service(message_service.MessageService(version="v1"))
         # self._add_service(cluster_service.ClusterService(version="v1"))
@@ -154,8 +152,11 @@ class Profile(object):
         # self._add_service(bare_metal_service.BareMetalService(version="v1"))
         # self._add_service(key_manager_service.KeyManagerService(version="v1"))
         # self._add_service(
-        # object_store_service.ObjectStoreService(version="v1"))
-        # self._add_service(rds_service.RDSService(version="v1"))
+            # object_store_service.ObjectStoreService(version="v1"))
+
+        self._add_service(rds_service.RDSService(version="v1"))
+        self._add_service(cdn_service.CDNService(version='v1'))
+
         # self._add_service(rds_os_service.RDSService(version="v1"))
         # self._add_service(telemetry_service.TelemetryService(version="v2"))
         # self._add_service(workflow_service.WorkflowService(version="v2"))
