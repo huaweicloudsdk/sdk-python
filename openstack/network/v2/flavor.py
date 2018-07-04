@@ -48,7 +48,8 @@ class Flavor(resource.Resource):
         flavor_id = self.id
         url = utils.urljoin(self.base_path, flavor_id, 'service_profiles')
         body = {"service_profile": {"id": service_profile_id}}
-        resp = session.post(url, endpoint_filter=self.service, json=body)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.post(url, endpoint_filter=self.service,  endpoint_override = endpoint_override ,json=body)
         return resp.json()
 
     def disassociate_flavor_from_service_profile(
@@ -56,5 +57,6 @@ class Flavor(resource.Resource):
         flavor_id = self.id
         url = utils.urljoin(
             self.base_path, flavor_id, 'service_profiles', service_profile_id)
-        session.delete(url, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        session.delete(url, endpoint_filter=self.service, endpoint_override = endpoint_override)
         return None

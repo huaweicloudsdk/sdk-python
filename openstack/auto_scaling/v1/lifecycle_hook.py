@@ -72,7 +72,7 @@ class InstanceHook(resource.Resource):
         response = session.put(request.uri, endpoint_filter=self.service,
                                endpoint_override=endpoint_override,
                                json=attrs, headers=request.headers)
-
+        ## http 返回码若成功为204
         if not response.status_code == 204:
             _logger.debug('request AS service lifecycle hook call back url is %s response code is %s ' % (response.url, response.status_code))
             raise exceptions.InvalidRequest(

@@ -45,8 +45,8 @@ class MetadataMixin(object):
             kwargs["json"] = {key: metadata}
 
         headers = {"Accept": ""} if delete else {}
-
-        response = method(url, headers=headers, **kwargs)
+        endpoint_override = self.service.get_endpoint_override()
+        response = method(url, headers=headers, endpoint_override = endpoint_override, **kwargs)
 
         # DELETE doesn't return a JSON body while everything else does.
         return response.json() if not delete else None

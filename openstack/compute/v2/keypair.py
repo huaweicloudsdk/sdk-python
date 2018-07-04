@@ -47,8 +47,9 @@ class Keypair(resource2.Resource):
 
     @classmethod
     def list(cls, session, paginated=False):
+        endpoint_override = cls.service.get_endpoint_override()
         resp = session.get(cls.base_path, endpoint_filter=cls.service,
-                           headers={"Accept": "application/json"})
+                           headers={"Accept": "application/json"}, endpoint_override = endpoint_override)
         resp = resp.json()
         resp = resp[cls.resources_key]
 

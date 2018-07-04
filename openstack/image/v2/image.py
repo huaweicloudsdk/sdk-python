@@ -41,7 +41,10 @@ class Image(resource2.Resource):
                                                "status", "size_min",
                                                "size_max", "sort_key",
                                                "sort_dir", "sort", "tag",
-                                               "created_at", "updated_at")
+                                               "created_at", "updated_at",
+                                               "__platform","__imagetype",
+                                                "__os_version"
+                                                )
 
     # NOTE: Do not add "self" support here. If you've used Python before,
     # you know that self, while not being a reserved word, has special
@@ -147,7 +150,7 @@ class Image(resource2.Resource):
     #: The common name of the operating system distribution in lowercase
     os_distro = resource2.Body('os_distro')
     #: The operating system version as specified by the distributor.
-    os_version = resource2.Body('os_version')
+    os_version = resource2.Body('__os_version')
     #: Secure Boot is a security standard. When the instance starts,
     #: Secure Boot first examines software such as firmware and OS by
     #: their signature and only allows them to run if the signatures are valid.
@@ -209,12 +212,20 @@ class Image(resource2.Resource):
     #: before the instance boots.
     has_auto_disk_config = resource2.Body('auto_disk_config', type=bool)
     #: The operating system installed on the image.
-    os_type = resource2.Body('os_type')
+    os_type = resource2.Body('__os_type')
+    #: The image type.
+    imagetype = resource2.Body("__imagetype")
+    #: The bit of the operation system installed on the image.
+    os_bit = resource2.Body("__os_bit")
+    #: The platform of the operation system installed on the image.
+    platform = resource2.Body("__platform")
+
 
     def _action(self, session, action):
         """Call an action on an image ID."""
         url = utils.urljoin(self.base_path, self.id, 'actions', action)
-        return session.post(url, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        return session.post(url, endpoint_filter=self.service, endpoint_override = endpoint_override)
 
     def deactivate(self, session):
         """Deactivate an image
@@ -234,26 +245,32 @@ class Image(resource2.Resource):
     def add_tag(self, session, tag):
         """Add a tag to an image"""
         url = utils.urljoin(self.base_path, self.id, 'tags', tag)
-        session.put(url, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        session.put(url, endpoint_filter=self.service, endpoint_override = endpoint_override)
 
     def remove_tag(self, session, tag):
         """Remove a tag from an image"""
         url = utils.urljoin(self.base_path, self.id, 'tags', tag)
-        session.delete(url, endpoint_filter=self.service)
+        endpoint_override = self.service.get_endpoint_override()
+        session.delete(url, endpoint_filter=self.service, endpoint_override = endpoint_override)
 
     def upload(self, session):
         """Upload data into an existing image"""
         url = utils.urljoin(self.base_path, self.id, 'file')
+        endpoint_override = self.service.get_endpoint_override()
         session.put(url, endpoint_filter=self.service, data=self.data,
                     headers={"Content-Type": "application/octet-stream",
-                             "Accept": ""})
+                             "Accept": ""},
+                    endpoint_override = endpoint_override)
 
     def download(self, session, stream=False):
         """Download the data contained in an image"""
         # TODO(briancurtin): This method should probably offload the get
         # operation into another thread or something of that nature.
         url = utils.urljoin(self.base_path, self.id, 'file')
-        resp = session.get(url, endpoint_filter=self.service, stream=stream)
+        endpoint_override = self.service.get_endpoint_override()
+        resp = session.get(url, endpoint_filter=self.service, stream=stream,
+                           endpoint_override = endpoint_override)
 
         # See the following bug report for details on why the checksum
         # code may sometimes depend on a second GET call.
@@ -294,8 +311,10 @@ class Image(resource2.Resource):
         }
         original = self.to_dict()
         patch_string = jsonpatch.make_patch(original, attrs).to_string()
+        endpoint_override = self.service.get_endpoint_override()
         resp = session.patch(url, endpoint_filter=self.service,
                              data=patch_string,
-                             headers=headers)
+                             headers=headers,
+                             endpoint_override = endpoint_override)
         self._translate_response(resp, has_body=True)
         return self

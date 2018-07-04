@@ -10,6 +10,8 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from openstack import proxy2
+from openstack import utils
 from openstack.network.v2 import address_scope as _address_scope
 from openstack.network.v2 import agent as _agent
 from openstack.network.v2 import auto_allocated_topology as \
@@ -47,8 +49,18 @@ from openstack.network.v2 import service_provider as _service_provider
 from openstack.network.v2 import subnet as _subnet
 from openstack.network.v2 import subnet_pool as _subnet_pool
 from openstack.network.v2 import vpn_service as _vpn_service
-from openstack import proxy2
-from openstack import utils
+
+from openstack.network.v2 import loadbalancer
+from openstack.network.v2 import listener
+from openstack.network.v2 import pool
+from openstack.network.v2 import policy
+from openstack.network.v2 import member
+from openstack.network.v2 import rule
+from openstack.network.v2 import whitelist
+from openstack.network.v2 import certificate
+from openstack.network.v2 import healthmonitor
+from openstack.network.v2 import statuses
+from openstack import proxy2, resource2
 
 
 class Proxy(proxy2.BaseProxy):
@@ -2840,171 +2852,818 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._update(_subnet.Subnet, subnet, **attrs)
 
-    def create_subnet_pool(self, **attrs):
-        """Create a new subnet pool from attributes
+    #the following interface are ulb
 
-        :param dict attrs: Keyword arguments which will be used to create
-            a :class:`~openstack.network.v2.subnet_pool.SubnetPool`,
-            comprised of the properties on the SubnetPool class.
 
-        :returns: The results of subnet pool creation
-        :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
-        """
-        return self._create(_subnet_pool.SubnetPool, **attrs)
-
-    def delete_subnet_pool(self, subnet_pool, ignore_missing=True):
-        """Delete a subnet pool
-
-        :param subnet_pool: The value can be either the ID of a subnet pool or
-            a :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the subnet pool does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent subnet pool.
-
-        :returns: ``None``
-        """
-        self._delete(_subnet_pool.SubnetPool, subnet_pool,
-                     ignore_missing=ignore_missing)
-
-    def find_subnet_pool(self, name_or_id, ignore_missing=True):
-        """Find a single subnet pool
-
-        :param name_or_id: The name or ID of a subnet pool.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.subnet_pool.SubnetPool`
-                  or None
-        """
-        return self._find(_subnet_pool.SubnetPool, name_or_id,
-                          ignore_missing=ignore_missing)
-
-    def get_subnet_pool(self, subnet_pool):
-        """Get a single subnet pool
-
-        :param subnet_pool: The value can be the ID of a subnet pool or a
-            :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
-
-        :returns: One :class:`~openstack.network.v2.subnet_pool.SubnetPool`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        return self._get(_subnet_pool.SubnetPool, subnet_pool)
-
-    def subnet_pools(self, **query):
-        """Return a generator of subnet pools
+    def loadbalancers(self, **query):
+        """Return a generator of loadbalancers
 
         :param kwargs \*\*query: Optional query parameters to be sent to limit
-            the resources being returned. Available parameters include:
+                                 the loadbalance being returned.
 
-            * ``address_scope_id``: Subnet pool address scope ID
-            * ``description``: The subnet pool description
-            * ``ip_version``: The IP address family
-            * ``is_default``: Subnet pool is the default (boolean)
-            * ``is_shared``: Subnet pool is shared (boolean)
-            * ``name``: Subnet pool name
-            * ``project_id``: Owner tenant ID
-
-        :returns: A generator of subnet pool objects
-        :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+        :returns: A generator of loadbalancers objects
         """
-        return self._list(_subnet_pool.SubnetPool, paginated=False, **query)
+        elb = loadbalancer.LoadBalancer
+        return self._list(elb, paginated = False, **query)
 
-    def update_subnet_pool(self, subnet_pool, **attrs):
-        """Update a subnet pool
+    def get_loadbalancer(self, lb):
+        """Get a single loadbalancer
 
-        :param subnet_pool: Either the ID of a subnet pool or a
-            :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
-        :param dict attrs: The attributes to update on the subnet pool
-                           represented by ``subnet_pool``.
+        :param lb: The value can be the ID of a loadbalancer or a
+                       :class:`~openstack.network.v2.loadbalancer.LoadBalancer` instance.
 
-        :returns: The updated subnet pool
-        :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
-        """
-        return self._update(_subnet_pool.SubnetPool, subnet_pool, **attrs)
-
-    def create_vpn_service(self, **attrs):
-        """Create a new vpn service from attributes
-
-        :param dict attrs: Keyword arguments which will be used to create
-            a :class:`~openstack.network.v2.vpn_service.VPNService`,
-            comprised of the properties on the VPNService class.
-
-        :returns: The results of vpn service creation
-        :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
-        """
-        return self._create(_vpn_service.VPNService, **attrs)
-
-    def delete_vpn_service(self, vpn_service, ignore_missing=True):
-        """Delete a vpn service
-
-        :param vpn_service:
-            The value can be either the ID of a vpn service or a
-            :class:`~openstack.network.v2.vpn_service.VPNService` instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the vpn service does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent vpn service.
-
-        :returns: ``None``
-        """
-        self._delete(_vpn_service.VPNService, vpn_service,
-                     ignore_missing=ignore_missing)
-
-    def find_vpn_service(self, name_or_id, ignore_missing=True):
-        """Find a single vpn service
-
-        :param name_or_id: The name or ID of a vpn service.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.vpn_service.VPNService`
-                  or None
-        """
-        return self._find(_vpn_service.VPNService, name_or_id,
-                          ignore_missing=ignore_missing)
-
-    def get_vpn_service(self, vpn_service):
-        """Get a single vpn service
-
-        :param vpn_service: The value can be the ID of a vpn service or a
-               :class:`~openstack.network.v2.vpn_service.VPNService`
-               instance.
-
-        :returns: One
-                  :class:`~openstack.network.v2.vpn_service.VPNService`
+        :returns: One :class:`~openstack.network.v2.loadbalancer.LoadBalancer`
         :raises: :class:`~openstack.exceptions.ResourceNotFound`
                  when no resource can be found.
         """
-        return self._get(_vpn_service.VPNService, vpn_service)
+        return self._get(loadbalancer.LoadBalancer, lb)
 
-    def vpn_services(self, **query):
-        """Return a generator of vpn services
+    def create_loadbalancer(self, **attrs):
+        """Create a new loadbalancer from attributes
 
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned.
+        :param dict attrs: Keyword arguments which will be used to create
+                           a :class:`~openstack.network.v2.loadbalancer.LoadBalancer`,
+                           comprised of the properties on the LoadBalancer class.
 
-        :returns: A generator of vpn service objects
-        :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
+        :returns: The results of loadbalancer creation
+        :rtype: :class:`~openstack.network.v2.loadbalancer.LoadBalancer`
         """
-        return self._list(_vpn_service.VPNService, paginated=False, **query)
+        return self._create(loadbalancer.LoadBalancer, **attrs)
 
-    def update_vpn_service(self, vpn_service, **attrs):
-        """Update a vpn service
+    def update_loadbalancer(self, lb, **attrs):
+        """Update a loadbalancer
 
-        :param vpn_service: Either the id of a vpn service or a
-            :class:`~openstack.network.v2.vpn_service.VPNService` instance.
-        :param dict attrs: The attributes to update on the VPN service
-                           represented by ``vpn_service``.
+        :param lb: Either the ID of a loadbalancer or a
+                       :class:`~openstack.network.v2.loadbalancer.LoadBalancer` instance.
+        :attrs kwargs: The attributes to update on the loadbalancer represented
+                       by ``loadbalancer``.
 
-        :returns: The updated vpnservice
-        :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
+        :returns: The updated loadbalancer
+        :rtype: :class:`~openstack.compute.v2.loadbalancer.Loadbalancer`
         """
-        return self._update(_vpn_service.VPNService, vpn_service, **attrs)
+        return self._update(loadbalancer.LoadBalancer, lb, **attrs)
+
+    def delete_loadbalancer(self, lb, ignore_missing=True):
+        """Delete a loadbalancer
+
+        :param lb: The value can be either the ID of a loadbalancer or a
+                       :class:`~openstack.network.v2.loadbalancer.LoadBalancer` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the loadbalancer does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent loadbalancer
+        :returns: ``None``
+        """
+
+        self._delete(loadbalancer.LoadBalancer, lb, ignore_missing=ignore_missing)
+
+    def get_loadbalancer_status_stree(self, lb):
+        """Get a single loadbalancer status
+
+        :param lb: The value can be the ID of a loadbalancer or a
+                       :class:`~openstack.network.v2.loadbalancer.LoadBalancer` instance.
+
+        :returns: One :class:`~openstack.network.v2.loadbalancer.LoadBalancer`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        lb = resource2.Resource._get_id(lb)
+        return self._get(statuses.Statuses, loadbalance_id = lb, requires_id = False )
+
+    def listeners(self, **query):
+        """Return a generator of listener
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the listener being returned.
+
+        :returns: A generator of listener objects
+        """
+        lsn = listener.Listener
+        return self._list(lsn, paginated=False, **query)
+
+    def get_listener(self, lsn):
+        """Get a single listener
+
+        :param lsn: The value can be the ID of a listener or a
+                       :class:`~openstack.network.v2.listener.Listener` instance.
+
+        :returns: One :class:`~openstack.network.v2.listener.Listener`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(listener.Listener, lsn)
+
+    def create_listener(self, **attrs):
+        """Create a new listener from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.listener.Listener`,
+                                   comprised of the properties on the LoadBalancer class.
+
+                :returns: The results of listener creation
+                :rtype: :class:`~openstack.network.v2.listener.Listener`
+                """
+        return self._create(listener.Listener, **attrs)
+
+    def update_listener(self, lsn, **attrs):
+        """Update a listener
+
+        :param lsn: Either the ID of a listener or a
+                       :class:`~openstack.network.v2.listener.Listener` instance.
+        :attrs kwargs: The attributes to update on the listener represented
+                       by ``listener``.
+
+        :returns: The updated listener
+        :rtype: :class:`~openstack.compute.v2.listener.Listener`
+        """
+        return self._update(listener.Listener, lsn, **attrs)
+
+    def delete_listener(self, lsn, ignore_missing=True):
+        """Delete a listener
+
+        :param lsn: The value can be either the ID of a listener or a
+                       :class:`~openstack.network.v2.listener.Listener` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the listener does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent listener
+        :returns: ``None``
+        """
+        self._delete(listener.Listener, lsn, ignore_missing=ignore_missing)
+
+    def pools(self, **query):
+        """Return a generator of pool
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the pool being returned.
+
+        :returns: A generator of pool objects
+        """
+        pol = pool.Pool
+        return self._list(pol, paginated=False, **query)
+
+    def get_pool(self, pol):
+        """Get a single pool
+
+        :param pol: The pol can be the ID of a pool or a
+                       :class:`~openstack.network.v2.pool.Pool` instance.
+
+        :returns: One :class:`~openstack.network.v2.pool.Pool`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(pool.Pool, pol)
+
+    def create_pool(self, **attrs):
+        """Create a new pool from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.pool.Pool`,
+                                   comprised of the properties on the Pool class.
+
+                :returns: The results of Pool creation
+                :rtype: :class:`~openstack.network.v2.pool.pool`
+                """
+        return self._create(pool.Pool, **attrs)
+
+    def update_pool(self, pol, **attrs):
+        """Update a pool
+
+        :param pol: Either the ID of a pool or a
+                       :class:`~openstack.network.v2.pool.Pool` instance.
+        :attrs kwargs: The attributes to update on the pool represented
+                       by ``pool``.
+
+        :returns: The updated pool
+        :rtype: :class:`~openstack.compute.v2.pool.Pool`
+        """
+        return self._update(pool.Pool, pol, **attrs)
+
+    def delete_pool(self, pol, ignore_missing=True):
+        """Delete a pool
+
+        :param pol: The value can be either the ID of a pool or a
+                       :class:`~openstack.network.v2.pool.Pool` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the pool does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent pool
+        :returns: ``None``
+        """
+        self._delete(pool.Pool, pol, ignore_missing=ignore_missing)
+
+
+    def members(self, **query):
+        """Return a generator of member
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the member being returned.
+
+        :returns: A generator of member objects
+        """
+        mem = member.Member
+        return self._list(mem, paginated=False, **query)
+
+    def get_member(self, mem, pool = None):
+        """Get a single member
+
+        :param mem: mem the ID of a member or a
+                       :class:`~openstack.network.v2.member.Member` instance.
+        :param pool: The ID of a pool or a
+                       :class:`~openstack.network.v2.pool.Pool` instance.
+
+        :returns: One :class:`~openstack.network.v2.member.Member`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        pool_id = self._get_uri_attribute( mem, pool, "pool_id")
+
+        return self._get(member.Member, mem , pool_id = pool_id)
+
+    def create_member(self, **attrs):
+        """Create a new member from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.member.Member`,
+                                   comprised of the properties on the Member class.
+
+                :returns: The results of listener creation
+                :rtype: :class:`~openstack.network.v2.member.Member`
+                """
+        return self._create(member.Member, **attrs)
+
+    def update_member(self, mem, **attrs):
+        """Update a member
+
+        :param mem: Either the ID of a member or a
+                       :class:`~openstack.network.v2.member.Member` instance.
+        :attrs kwargs: The attributes to update on the member represented
+                       by ``member``.
+
+        :returns: The updated member
+        :rtype: :class:`~openstack.compute.v2.member.Member`
+
+        """
+        return self._update(member.Member, mem, **attrs)
+
+    def delete_member(self, mem, pool = None, ignore_missing=True):
+        """Delete a member
+
+        :param mem: The value can be either the ID of a member or a
+                       :class:`~openstack.network.v2.member.Member` instance.
+        :param pool: The ID of a pool or a
+                       :class:`~openstack.network.v2.pool.Pool` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the member does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent member
+        :returns: ``None``
+        """
+        pool_id = self._get_uri_attribute(mem, pool, "pool_id")
+        self._delete(member.Member, mem, pool_id = pool_id, ignore_missing=ignore_missing)
+
+    def healthmonitors(self, **query):
+        """Return a generator of healthmonitor
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the healthmonitor being returned.
+
+        :returns: A generator of healthmonitor objects
+        """
+        hlth = healthmonitor.HealthMonitor
+        return self._list(hlth, paginated=False, **query)
+
+    def get_healthmonitor(self, hlth):
+        """Get a single healthmonitor
+
+        :param hlth: The value can be the ID of a healthmonitor or a
+                       :class:`~openstack.network.v2.healthmonitor.HealthMonitor` instance.
+
+        :returns: One :class:`~openstack.network.v2.healthmonitor.HealthMonitor`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(healthmonitor.HealthMonitor, hlth)
+
+    def create_healthmonitor(self, **attrs):
+        """Create a new healthmonitor from attributes
+
+        :param dict attrs: Keyword arguments which will be used to create
+                           a :class:`~openstack.network.v2.healthmonitor.HealthMonitor`,
+                           comprised of the properties on the healthmonitor class.
+
+        :returns: The results of listener creation
+        :rtype: :class:`~openstack.network.v2.healthmonitor.HealthMonitor`
+        """
+        return self._create(healthmonitor.HealthMonitor, **attrs)
+
+    def update_healthmonitor(self, hlth, **attrs):
+        """Update a healthmonitor
+
+        :param hlth: Either the ID of a healthmonitor or a
+                       :class:`~openstack.network.v2.healthmonitor.HealthMonitor` instance.
+        :attrs kwargs: The attributes to update on the healthmonitor represented
+                       by ``healthmonitor``.
+
+        :returns: The updated healthmonitor
+        :rtype: :class:`~openstack.compute.v2.healthmonitor.HealthMonitor`
+        """
+        return self._update(healthmonitor.HealthMonitor, hlth, **attrs)
+
+    def delete_healthmonitor(self, hlth, ignore_missing=True):
+        """Delete a policy
+
+        :param hlth: The value can be either the ID of a healthmonitor or a
+                       :class:`~openstack.network.v2.healthmonitor.HealthMonitor` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the policy does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent healthmonitor
+        :returns: ``None``
+        """
+        self._delete(healthmonitor.HealthMonitor, hlth, ignore_missing=ignore_missing)
+
+    def poliycies(self, **query):
+        """Return a generator of policy
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the policy being returned.
+
+        :returns: A generator of policy objects
+        """
+        plc = policy.Policy
+        return self._list(plc, paginated=False, **query)
+
+    def get_policy(self, plc):
+        """Get a single policy
+
+        :param plc: The value can be the ID of a policy or a
+                       :class:`~openstack.network.v2.policy.Policy` instance.
+
+        :returns: One :class:`~openstack.network.v2.policy.Policy`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(policy.Policy, plc)
+
+
+    def create_policy(self, **attrs):
+        """Create a new policy from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.policy.Policy`,
+                                   comprised of the properties on the healthmonitor class.
+
+                :returns: The results of policy creation
+                :rtype: :class:`~openstack.network.v2.policy.Policy`
+                """
+        return self._create(policy.Policy, **attrs)
+
+    def update_policy(self, plc, **attrs):
+        """Update a policy
+
+        :param plc: Either the ID of a policy or a
+                       :class:`~openstack.network.v2.policy.Policy` instance.
+        :attrs kwargs: The attributes to update on the policy represented
+                       by ``policy``.
+
+        :returns: The updated policy
+        :rtype: :class:`~openstack.compute.v2.policy.Policy`
+        """
+        return self._update(policy.Policy, plc, **attrs)
+
+    def delete_policy(self, plc, ignore_missing=True):
+        """Delete a policy
+
+        :param plc: The value can be either the ID of a policy or a
+                       :class:`~openstack.network.v2.policy.Policy` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the policy does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent policy
+        :returns: ``None``
+        """
+        self._delete(policy.Policy, plc, ignore_missing=ignore_missing)
+
+    def rules(self, **query):
+        """Return a generator of rule
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the rule being returned.
+
+        :returns: A generator of rule objects
+        """
+        ru = rule.Rule
+        return self._list(ru, paginated=False, **query)
+
+    def get_rule(self, rul, policy):
+        """Get a single rule
+
+        :param rul: The value can be the ID of a rule or a
+                       :class:`~openstack.network.v2.rule.Rules` instance.
+
+        :returns: One :class:`~openstack.network.v2.rule.Rules`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        policy_id = self._get_uri_attribute(rul, policy, "policy_id")
+        return self._get(rule.Rule, rul, policy_id = policy_id )
+
+    def create_rule(self, **attrs):
+        """Create a new rule from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.rule.Rule`,
+                                   comprised of the properties on the rule class.
+
+                :returns: The results of rule creation
+                :rtype: :class:`~openstack.network.v2.rule.Rule`
+                """
+        return self._create(rule.Rule, **attrs)
+
+    def update_rule(self, rul, **attrs):
+        """Update a rule
+
+        :param rul: Either the ID of a rule or a
+                       :class:`~openstack.network.v2.rule.Rule` instance.
+        :attrs kwargs: The attributes to update on the rule represented
+                       by ``rule``.
+
+        :returns: The updated rule
+        :rtype: :class:`~openstack.compute.v2.rule.Rule`
+        """
+        return self._update(rule.Rule, rul, **attrs)
+
+    def delete_rule(self, rul, policy ,ignore_missing=True):
+        """Delete a rule
+
+        :param rul: The value can be either the ID of a rule or a
+                       :class:`~openstack.network.v2.rule.Rule` instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the rul does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent policy
+        :returns: ``None``
+        """
+        policy_id = self._get_uri_attribute(rul, policy, "policy_id")
+        self._delete(rule.Rule, rul, policy_id = policy_id, ignore_missing=ignore_missing)
+
+
+    def whitelists(self, **query):
+        """Return a generator of whitelist
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the whitelist being returned.
+
+        :returns: A generator of whitelist objects
+        """
+        wl = whitelist.WhiteList
+        return self._list(wl, paginated=False, **query)
+
+    def get_whitelist(self, wl):
+        """Get a single whitelists
+
+        :param wl: The value can be the ID of a whitelists or a
+                       :class:`~openstack.network.v2.whitelist.Whitelist` instance.
+
+        :returns: One :class:`~openstack.network.v2.whitelist.Whitelist`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(whitelist.WhiteList, wl)
+
+    def create_whitelist(self, **attrs):
+        """Create a new whitelist from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.whitelist.Whitelist`,
+                                   comprised of the properties on the whitelist class.
+
+                :returns: The results of whitelist creation
+                :rtype: :class:`~openstack.network.v2.whitelist.Whitelist`
+                """
+        return self._create(whitelist.WhiteList, **attrs)
+
+    def update_whitelist(self, wl, **attrs):
+        """Update a whitelist
+
+        :param rul: Either the ID of a whitelist or a
+                       :class:`~openstack.network.v2.whitelist.Whitelist` instance.
+        :attrs kwargs: The attributes to update on the whitelist represented
+                       by ``whitelist``.
+
+        :returns: The updated whitelist
+        :rtype: :class:`~openstack.compute.v2.whitelist.Whitelist`
+        """
+        return self._update(whitelist.WhiteList, wl, **attrs)
+
+    def delete_whitelist(self, wl, ignore_missing=True):
+        """Delete a whitelist.Whitelist
+
+        :param rul: The value can be either the ID of a whitelist or a
+                       :class:`~openstack.network.v2.whitelist.Whitelist instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the rul does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent policy
+        :returns: ``None``
+        """
+        self._delete(whitelist.WhiteList, wl, ignore_missing=ignore_missing)
+
+
+    def certificates(self, **query):
+        """Return a generator of certificate
+
+        :param kwargs \*\*query: Optional query parameters to be sent to limit
+                                 the whitelist being returned.
+
+        :returns: A generator of certificate objects
+        """
+        cf = certificate.Certificate
+        return self._list(cf, paginated=False, **query)
+
+    def get_certificate(self, cf):
+        """Get a single certificate
+
+        :param cf: The value can be the ID of a certificate or a
+                       :class:`~openstack.network.v2.certificate.Certificate` instance.
+
+        :returns: One :class:`~openstack.network.v2.certificate.Certificate`
+        :raises: :class:`~openstack.exceptions.ResourceNotFound`
+                 when no resource can be found.
+        """
+        return self._get(certificate.Certificate, cf)
+
+    def create_certificate(self, **attrs):
+        """Create a new certificate from attributes
+
+                :param dict attrs: Keyword arguments which will be used to create
+                                   a :class:`~openstack.network.v2.certificate.Certificate`,
+                                   comprised of the properties on the whitelist class.
+
+                :returns: The results of certificate.Certificate creation
+                :rtype: :class:`~openstack.network.v2.certificate.Certificate`
+                """
+        return self._create(certificate.Certificate, prepend_key = False, **attrs)
+
+    def update_certificate(self, cf , **attrs):
+        """Update a certificate
+
+        :param cf: Either the ID of a certificate or a
+                       :class:`~openstack.network.v2.certificate.Certificate` instance.
+        :attrs kwargs: The attributes to update on the certificate.Certificate represented
+                       by ``certificate``.
+
+        :returns: The updated certificate.Certificate
+        :rtype: :class:`~openstack.compute.v2.certificate.Certificate`
+        """
+        return self._update(certificate.Certificate, cf, prepend_key= False, **attrs)
+
+    def delete_certificate(self, cf, ignore_missing=True):
+        """Delete a certificate
+
+        :param cf: The value can be either the ID of a certificate or a
+                       :class:`~openstack.network.v2.certificate.Certificate instance.
+        :param bool ignore_missing: When set to ``False``
+                    :class:`~openstack.exceptions.ResourceNotFound` will be
+                    raised when the rul does not exist.
+                    When set to ``True``, no exception will be set when
+                    attempting to delete a nonexistent policy
+        :returns: ``None``
+        """
+        self._delete(certificate.Certificate, cf, ignore_missing=ignore_missing)
+    # def create_subnet_pool(self, **attrs):
+    #     """Create a new subnet pool from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #         a :class:`~openstack.network.v2.subnet_pool.SubnetPool`,
+    #         comprised of the properties on the SubnetPool class.
+    #
+    #     :returns: The results of subnet pool creation
+    #     :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+    #     """
+    #     return self._create(_subnet_pool.SubnetPool, **attrs)
+    #
+    # def delete_subnet_pool(self, subnet_pool, ignore_missing=True):
+    #     """Delete a subnet pool
+    #
+    #     :param subnet_pool: The value can be either the ID of a subnet pool or
+    #         a :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the subnet pool does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent subnet pool.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_subnet_pool.SubnetPool, subnet_pool,
+    #                  ignore_missing=ignore_missing)
+    #
+    # def find_subnet_pool(self, name_or_id, ignore_missing=True):
+    #     """Find a single subnet pool
+    #
+    #     :param name_or_id: The name or ID of a subnet pool.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+    #               or None
+    #     """
+    #     return self._find(_subnet_pool.SubnetPool, name_or_id,
+    #                       ignore_missing=ignore_missing)
+    #
+    # def get_subnet_pool(self, subnet_pool):
+    #     """Get a single subnet pool
+    #
+    #     :param subnet_pool: The value can be the ID of a subnet pool or a
+    #         :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
+    #
+    #     :returns: One :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_subnet_pool.SubnetPool, subnet_pool)
+    #
+    # def subnet_pools(self, **query):
+    #     """Return a generator of subnet pools
+    #
+    #     :param kwargs \*\*query: Optional query parameters to be sent to limit
+    #         the resources being returned. Available parameters include:
+    #
+    #         * ``address_scope_id``: Subnet pool address scope ID
+    #         * ``description``: The subnet pool description
+    #         * ``ip_version``: The IP address family
+    #         * ``is_default``: Subnet pool is the default (boolean)
+    #         * ``is_shared``: Subnet pool is shared (boolean)
+    #         * ``name``: Subnet pool name
+    #         * ``project_id``: Owner tenant ID
+    #
+    #     :returns: A generator of subnet pool objects
+    #     :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+    #     """
+    #     return self._list(_subnet_pool.SubnetPool, paginated=False, **query)
+    #
+    # def update_subnet_pool(self, subnet_pool, **attrs):
+    #     """Update a subnet pool
+    #
+    #     :param subnet_pool: Either the ID of a subnet pool or a
+    #         :class:`~openstack.network.v2.subnet_pool.SubnetPool` instance.
+    #     :param dict attrs: The attributes to update on the subnet pool
+    #                        represented by ``subnet_pool``.
+    #
+    #     :returns: The updated subnet pool
+    #     :rtype: :class:`~openstack.network.v2.subnet_pool.SubnetPool`
+    #     """
+    #     return self._update(_subnet_pool.SubnetPool, subnet_pool, **attrs)
+
+    # def create_vpn_service(self, **attrs):
+    #     """Create a new vpn service from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #         a :class:`~openstack.network.v2.vpn_service.VPNService`,
+    #         comprised of the properties on the VPNService class.
+    #
+    #     :returns: The results of vpn service creation
+    #     :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
+    #     """
+    #     return self._create(_vpn_service.VPNService, **attrs)
+    #
+    # def delete_vpn_service(self, vpn_service, ignore_missing=True):
+    #     """Delete a vpn service
+    #
+    #     :param vpn_service:
+    #         The value can be either the ID of a vpn service or a
+    #         :class:`~openstack.network.v2.vpn_service.VPNService` instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the vpn service does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent vpn service.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_vpn_service.VPNService, vpn_service,
+    #                  ignore_missing=ignore_missing)
+    #
+    # def find_vpn_service(self, name_or_id, ignore_missing=True):
+    #     """Find a single vpn service
+    #
+    #     :param name_or_id: The name or ID of a vpn service.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.vpn_service.VPNService`
+    #               or None
+    #     """
+    #     return self._find(_vpn_service.VPNService, name_or_id,
+    #                       ignore_missing=ignore_missing)
+    #
+    # def get_vpn_service(self, vpn_service):
+    #     """Get a single vpn service
+    #
+    #     :param vpn_service: The value can be the ID of a vpn service or a
+    #            :class:`~openstack.network.v2.vpn_service.VPNService`
+    #            instance.
+    #
+    #     :returns: One
+    #               :class:`~openstack.network.v2.vpn_service.VPNService`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_vpn_service.VPNService, vpn_service)
+    #
+    # def vpn_services(self, **query):
+    #     """Return a generator of vpn services
+    #
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned.
+    #
+    #     :returns: A generator of vpn service objects
+    #     :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
+    #     """
+    #     return self._list(_vpn_service.VPNService, paginated=False, **query)
+    #
+    # def update_vpn_service(self, vpn_service, **attrs):
+    #     """Update a vpn service
+    #
+    #     :param vpn_service: Either the id of a vpn service or a
+    #         :class:`~openstack.network.v2.vpn_service.VPNService` instance.
+    #     :param dict attrs: The attributes to update on the VPN service
+    #                        represented by ``vpn_service``.
+    #
+    #     :returns: The updated vpnservice
+    #     :rtype: :class:`~openstack.network.v2.vpn_service.VPNService`
+    #     """
+    #     return self._update(_vpn_service.VPNService, vpn_service, **attrs)
+    # def create_ipsec_policy(self, **attrs):
+    #     return self._create(_vpn_service.IPSecPolicy, **attrs)
+    #
+    # def get_ipsec_policy(self, **attrs):
+    #     return self._list(_vpn_service.IPSecPolicy, **attrs)
+    #
+    # def find_ipsec_policy(self, ipsec_policy, **attrs):
+    #     return self._get(_vpn_service.IPSecPolicy, ipsec_policy, **attrs)
+    #
+    # def update_ipsec_policy(self, ipsec_policy, **attrs):
+    #     return self._update(_vpn_service.IPSecPolicy, ipsec_policy, **attrs)
+    #
+    # def delete_ipsec_policy(self, ipsec_policy, ignore_missing=True, **attrs):
+    #     return self._delete(_vpn_service.IPSecPolicy, ipsec_policy, ignore_missing=ignore_missing, **attrs)
+    #
+    # def create_ike_policy(self, **attrs):
+    #     return self._create(_vpn_service.IKEPolicy, **attrs)
+    #
+    # def get_ike_policy(self, **attrs):
+    #     return self._list(_vpn_service.IKEPolicy, **attrs)
+    #
+    # def find_ike_policy(self, ike_policy, ignore_missing=True, **attrs):
+    #     return self._get(_vpn_service.IKEPolicy, ike_policy, ignore_missing=ignore_missing, **attrs)
+    #
+    # def update_ike_policy(self, ike_policy, **attrs):
+    #     return self._update(_vpn_service.IKEPolicy, ike_policy, **attrs)
+    #
+    # def delete_ike_policy(self, ike_policy, ignore_missing=True, **attrs):
+    #     return self._delete(_vpn_service.IKEPolicy, ike_policy, ignore_missing=ignore_missing, **attrs)
+    #
+    # def create_endpoint_group(self, **attrs):
+    #     return self._create(_vpn_service.EndPointGroup, **attrs)
+    #
+    # def get_endpoint_group(self, **attrs):
+    #     return self._list(_vpn_service.EndPointGroup, **attrs)
+    #
+    # def find_endpoint_group(self, endpoint_group, **attrs):
+    #     return self._find(_vpn_service.EndPointGroup, endpoint_group, **attrs)
+    #
+    # def update_endpoint_group(self, endpoint_group, **attrs):
+    #     return self._update(_vpn_service.EndPointGroup, endpoint_group, **attrs)
+    #
+    # def delete_endpoint_group(self, enpoint_group, ignore_missing=True, **attrs):
+    #     return self._delete(_vpn_service.EndPointGroup, enpoint_group, ignore_missing=ignore_missing, **attrs)
+    #
+    # def create_vpn_connection(self, **attrs):
+    #     return self._create(_vpn_service.VPNConnetion, **attrs)
+    #
+    # def get_vpn_connection(self, **attrs):
+    #     return self._list(_vpn_service.VPNConnetion, **attrs)
+    #
+    # def find_vpn_connection(self, vpn_connection, **attrs):
+    #     return self._find(_vpn_service.VPNConnetion, vpn_connection, **attrs)
+    #
+    # def update_vpn_connection(self, vpn_connection, **attrs):
+    #     return self._update(_vpn_service.VPNConnetion, vpn_connection, **attrs)
+    #
+    # def delete_vpn_connection(self, vpn_connection, ignore_missing=True, **attrs):
+    #     return self._delete(_vpn_service.VPNConnetion, vpn_connection, ignore_missing=ignore_missing, **attrs)

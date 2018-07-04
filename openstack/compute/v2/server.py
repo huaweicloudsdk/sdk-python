@@ -180,8 +180,9 @@ class Server(resource2.Resource, metadata.MetadataMixin):
         # the URL used is sans any additional /detail/ part.
         url = utils.urljoin(Server.base_path, self.id, 'action')
         headers = {'Accept': ''}
+        endpoint_override = self.service.get_endpoint_override()
         return session.post(
-            url, endpoint_filter=self.service, json=body, headers=headers)
+            url, endpoint_filter=self.service, json=body, headers=headers, endpoint_override = endpoint_override)
 
     def change_password(self, session, new_password):
         """Change the administrator password to the given password."""
