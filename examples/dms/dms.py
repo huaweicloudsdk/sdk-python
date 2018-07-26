@@ -110,8 +110,8 @@ def consume_message(conn, queue):
 
 # Consume message by tag list in queue and group
 def consume_message_with_tags(conn, qui, gid):
-    #qid = '673f8fca-9aa1-4974-8fc5-b0eb1c5f9724'
-    #gid = 'g-a826e437-2e67-46c7-b220-63836b5bb463'
+    qid = '673f8fca-9aa1-4974-8fc5-b0eb1c5f9724'
+    # gid = 'g-a826e437-2e67-46c7-b220-63836b5bb463'
     params = {
         'max_msgs': 10,
         'time_wait': 30,
