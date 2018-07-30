@@ -14,8 +14,7 @@ Apache 2.0
 
 Copyright
 ---------
-
-Copyright 2017 HuaWei Tld
+Copyright 2018 Huawei Technologies Co., Ltd.
 
 Copyright 2017 OpenStack.org
 
