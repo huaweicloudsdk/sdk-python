@@ -208,7 +208,7 @@ class ServiceFilter(dict):
         """
         return self.__class__.__module__.split('.')[-2]
 
-    # Qianbiao.NG::endpoint override feature for HuaWei.tld OpenStack Services
+    # Qianbiao.NG::endpoint override feature for Huawei OpenStack Services
     def get_endpoint_override(self):
         """Get service endpoint override
 
