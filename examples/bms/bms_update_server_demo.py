@@ -30,5 +30,3 @@ new_body = {
             "name": "test.bms_update_name"
         }
 update_bare_metal_server(server_id, new_body)
-
-

@@ -52,7 +52,7 @@ EXAMPLE = {
     'block_device_mapping_v2': {'key': '29'},
     'OS-EXT-SRV-ATTR:hypervisor_hostname': 'hypervisor.example.com',
     'OS-EXT-SRV-ATTR:instance_name': 'instance-00000001',
-    'OS-SCH-HNT:scheduler_hints': {'key': '30'},
+    'os:scheduler_hints': {'key': '30'},
     'OS-EXT-SRV-ATTR:user_data': '31'
 }
 
@@ -145,7 +145,7 @@ class TestServer(testtools.TestCase):
                          sot.hypervisor_hostname)
         self.assertEqual(EXAMPLE['OS-EXT-SRV-ATTR:instance_name'],
                          sot.instance_name)
-        self.assertEqual(EXAMPLE['OS-SCH-HNT:scheduler_hints'],
+        self.assertEqual(EXAMPLE['os:scheduler_hints'],
                          sot.scheduler_hints)
         self.assertEqual(EXAMPLE['OS-EXT-SRV-ATTR:user_data'], sot.user_data)
 
@@ -180,9 +180,9 @@ class TestServer(testtools.TestCase):
         self.assertEqual(request.body[sot.resource_key]["user_data"],
                          data)
 
-        self.assertNotIn("OS-SCH-HNT:scheduler_hints",
+        self.assertNotIn("os:scheduler_hints",
                          request.body[sot.resource_key])
-        self.assertEqual(request.body["OS-SCH-HNT:scheduler_hints"], hints)
+        self.assertEqual(request.body["os:scheduler_hints"], hints)
 
     def test_change_password(self):
         sot = server.Server(**EXAMPLE)

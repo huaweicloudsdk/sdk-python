@@ -134,7 +134,7 @@ class FloatingIP(resource.Resource):
 
         for r in ('enable_L7', 'traffic_pos_id', 'http_request_pos_id',
                   'cleaning_access_pos_id', 'app_type_id'):
-            if not r in request.body:
+            if r not in request.body:
                 request.body[r] = getattr(self, r)
 
         response = session.put(request.uri, endpoint_filter=self.service,
