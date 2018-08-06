@@ -251,24 +251,6 @@ class MessageConsume(resource.Resource):
 
             msgs.append({"handler": consumed_message.handler, "status": consumed_message.status if consumed_message.status else status})
 
-        # body = {
-
-        #     "message": [
-
-        #         {
-
-        #             "handler": self.handler,
-
-        #             "status": self.status if self.status else status
-
-        #         }
-
-        #     ]
-
-        # }
-
- 
-
         headers = self._header.dirty
 
         headers.update({'Content-type': 'application/json'})
