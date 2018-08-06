@@ -242,9 +242,7 @@ class MessageConsume(resource.Resource):
         base_path = 'ack'.join(self.base_path.rsplit('messages', 1))
 
         uri = base_path % self._uri.attributes
-
         body = {}
-
         msgs = body.setdefault("message",[])
 
         for consumed_message in consumed_messages:
@@ -252,23 +250,13 @@ class MessageConsume(resource.Resource):
             msgs.append({"handler": consumed_message.handler, "status": consumed_message.status if consumed_message.status else status})
 
         headers = self._header.dirty
-
         headers.update({'Content-type': 'application/json'})
-
         headers.update({'Content-Length': str(len(str(body)))})
-
- 
-
         response = session.post(uri, endpoint_filter=self.service,
-
                                 endpoint_override=endpoint_override,
-
                                 json=body, headers=headers
-
                                 )
-
         self._translate_response(response)
-
         return self
 
 

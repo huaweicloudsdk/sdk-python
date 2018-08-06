@@ -150,15 +150,10 @@ class Proxy(proxy2.BaseProxy):
         """
 
         if isinstance(consumed_message, list) and len(consumed_message) > 0:
-
             msg = consumed_message[0]
-
         if isinstance(consumed_message, _queue.MessageConsume):
-
             msg = consumed_message
-
             consumed_message = [msg]
-
         return msg.ack(self._session, consumed_message, status=status)
 
     def quotas(self):
