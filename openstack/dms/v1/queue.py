@@ -233,30 +233,60 @@ class MessageConsume(resource.Resource):
 
             return ret
 
-    def ack(self, session, status='success'):
+    def ack(self, session, consumed_messages, status='success'):
+
         endpoint_override = self.service.get_endpoint_override()
+
         # base_path is /queues/{queue_id}/groups/{consumer_group_id}/ack
+
         base_path = 'ack'.join(self.base_path.rsplit('messages', 1))
+
         uri = base_path % self._uri.attributes
 
-        body = {
-            "message": [
-                {
-                    "handler": self.handler,
-                    "status": self.status if self.status else status
-                }
-            ]
-        }
+        body = {}
+
+        msgs = body.setdefault("message",[])
+
+        for consumed_message in consumed_messages:
+
+            msgs.append({"handler": consumed_message.handler, "status": consumed_message.status if consumed_message.status else status})
+
+        # body = {
+
+        #     "message": [
+
+        #         {
+
+        #             "handler": self.handler,
+
+        #             "status": self.status if self.status else status
+
+        #         }
+
+        #     ]
+
+        # }
+
+ 
 
         headers = self._header.dirty
+
         headers.update({'Content-type': 'application/json'})
+
         headers.update({'Content-Length': str(len(str(body)))})
 
+ 
+
         response = session.post(uri, endpoint_filter=self.service,
+
                                 endpoint_override=endpoint_override,
-                                json=body, headers=headers)
+
+                                json=body, headers=headers
+
+                                )
 
         self._translate_response(response)
+
         return self
 
 

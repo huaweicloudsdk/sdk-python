@@ -138,15 +138,28 @@ class Proxy(proxy2.BaseProxy):
                           consumer_group_id=consumer_group_id, **query)
 
     def ack_consumed_message(self, consumed_message, status='success'):
-        """Confirm consumed message
 
-        :param consumed_message: An object of an instance of
+        """Confirm consumed message
+        :param consumed_message: An object of  instance of
+
                                :class:`~openstack.dms.v1.queue.MessageConsume`
         :param status: The expeced status of the consumed message
         :returns: An object of an instance of
                   :class:`~openstack.dms.v1.queue.MessageConsume`
+
         """
-        return consumed_message.ack(self._session, status=status)
+
+        if isinstance(consumed_message, list) and len(consumed_message) > 0:
+
+            msg = consumed_message[0]
+
+        if isinstance(consumed_message, _queue.MessageConsume):
+
+            msg = consumed_message
+
+            consumed_message = [msg]
+
+        return msg.ack(self._session, consumed_message, status=status)
 
     def quotas(self):
         return self._list(_queue.Quota)
