@@ -60,15 +60,16 @@ try to find it and if that fails, you would create it::
 import logging
 import sys
 
-from keystoneauth1.loading import base as ksa_loader
+import os
 import os_client_config
-
+from keystoneauth1.loading import base as ksa_loader
 from openstack import exceptions
 from openstack import profile as _profile
 from openstack import proxy
 from openstack import proxy2
 from openstack import session as _session
 from openstack import utils
+from openstack import aksksession as aksession
 
 _logger = logging.getLogger(__name__)
 
@@ -156,9 +157,8 @@ def from_config(cloud_name=None, cloud_config=None, options=None):
 
 
 class Connection(object):
-
     def __init__(self, session=None, authenticator=None, profile=None,
-                 verify=True, cert=None, user_agent=None,
+                 verify=True, timeout=None, cert=None, user_agent=None,
                  auth_plugin="password",
                  **auth_args):
         """Create a context for a connection to a cloud provider.
@@ -190,6 +190,9 @@ class Connection(object):
             this parameter will be used to create a transport.  If ``verify``
             is set to true, which is the default, the SSL cert will be
             verified.  It can also be set to a CA_BUNDLE path.
+        :param float timeout: A timeout to pass to requests. This should be a
+            numerical value indicating some amount (or fraction)
+            of seconds or 0 for no timeout. (optional, default to 0)
         :param cert: If a transport is not provided to the connection then this
             parameter will be used to create a transport. `cert` allows to
             provide a client certificate file path or a tuple with client
@@ -224,12 +227,35 @@ class Connection(object):
                     'Session instance is from %s but must be from %s' %
                     (session.__module__, _session.__name__))
             self.session = session
+        elif auth_args.get('ak', None) or auth_args.get('sk', None):
+            # profile,
+            # original_ip = None, verify = True,
+            # cert = None, timeout = None,
+            # user_agent = None,
+            # redirect = 30, additional_headers = None,
+            # app_name = None, app_version = None,
+            # additional_user_agent = None, endpoint_file = '',
+            # ak = None, sk = None, project_id = None,
+            # region = None, domain = None
+            endpointfile = os.path.join(os.path.dirname(__file__), 'service_endpoint.json')
+            self.session = aksession.ASKSession(self.profile,
+                                                verify = verify,
+                                                timeout=timeout,
+                                                cert=cert,
+                                                user_agent=user_agent,
+                                                ak = auth_args.get('ak',None),
+                                                sk = auth_args.get('sk',None),
+                                                project_id = auth_args.get('project_id',None),
+                                                region= auth_args.get("region",None),
+                                                domain = auth_args.get('domain',None),
+                                                endpoint_file= endpointfile
+                                                )
         else:
             self.authenticator = self._create_authenticator(authenticator,
                                                             auth_plugin,
                                                             **auth_args)
             self.session = _session.Session(
-                self.profile, auth=self.authenticator, verify=verify,
+                self.profile, auth=self.authenticator, verify=verify, timeout=timeout,
                 cert=cert, user_agent=user_agent)
 
         self._open()
