@@ -24,7 +24,7 @@
     "public": "https://dms.%(region)s.%(domain)s/v1.0/%(project_id)s"
   },
   "DNS": {
-    "public": "https://dns.%(region)s.%(domain)s/v2"
+    "public": "https://dns.%(domain)s/v2"
   },
     "ECS": {
     "public": "https://ecs.%(region)s.%(domain)s/v1/%(project_id)s"
@@ -45,7 +45,7 @@
      "public": "https://ims.%(region)s.%(domain)s/v2"
   },
   "KMS": {
-     "public": "https://kms.%(region)s.%(domain)s/v1.0"
+     "public": "https://kms.%(region)s.%(domain)s/v1.0/%(project_id)s"
   },
   "LOAD_BALANCER": {
      "public": "https://elb.%(region)s.%(domain)s/v1.0/%(project_id)s"
