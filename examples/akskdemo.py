@@ -14,7 +14,6 @@ AK = '***'
 SK = '***'
 
 conn = connection.Connection(
-              verify= False,
               project_id=projectId,
               domain=domain,
               region=region,
