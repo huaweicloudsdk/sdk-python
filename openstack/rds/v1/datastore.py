@@ -43,7 +43,7 @@ class Version(_rdsresource.Resource):
 
 class Parameter(_rdsresource.Resource):
 
-    base_path = '/datastores/versions/%(datastore_version_id)s/parameters/'
+    base_path = '/datastores/versions/%(datastore_version_id)s/parameters'
     resources_key = 'configuration-parameters'
     service = rds_service.RDSService()
 
@@ -70,4 +70,4 @@ class Parameter(_rdsresource.Resource):
     #: *Type: bool*
     restart_required = resource.Body('restart_required', type=bool)
     #: Datastore version id
-    datastore_version_id = resource.Body('datastore_version_id')
+    datastore_version_id = resource.URI('datastore_version_id')

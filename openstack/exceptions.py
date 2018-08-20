@@ -51,10 +51,9 @@ class InvalidRequest(SDKException):
 
 
 class HttpException(SDKException):
-
     def __init__(self, message=None, details=None, response=None,
                  request_id=None, url=None, method=None,
-                 http_status=None, cause=None):
+                 http_status=None, cause=None, code=None):
         super(HttpException, self).__init__(message=message, cause=cause)
         self.details = details
         self.response = response
@@ -62,6 +61,7 @@ class HttpException(SDKException):
         self.url = url
         self.method = method
         self.http_status = http_status
+        self.code = code
 
     def __unicode__(self):
         msg = self.__class__.__name__ + ": " + self.message
@@ -112,23 +112,27 @@ class ResourceFailure(SDKException):
     pass
 
 
-code_key_list = ["code", "errorCode"]
-message_ley_list = ["message", "error_message", "details",
+code_key_list = ["code", "errorCode", "errCode"]
+message_ley_list = ["message", "error_message", "externalMessage", "details",
                     "NeutronError", "computeFault", "TackerError"]
 
 
 def auto_detect_errors(obj):
     code = ""
+    message = ""
     for key in code_key_list:
         if key in obj.keys():
-            code = "[" + str(obj.get(key)) + "] "
+            # code = "[" + str(obj.get(key)) + "] "
+            code = str(obj.get(key))
             break
 
     for key in message_ley_list:
         if key in obj.keys():
             message = obj.get(key)
-            return code + message if code != "" else message
-    return None
+            break
+            # return code + message if code != "" else message
+
+    return [code, message]
 
 
 def from_exception(exc):
@@ -143,14 +147,28 @@ def from_exception(exc):
     resp_body = resp.content
     content_type = resp.headers.get('content-type', '')
     if resp_body and 'application/json' in content_type:
+
         # compatibility for HuaWei OpenStack Service error response
-        details = auto_detect_errors(resp.json())
-        if not details:
+
+        exec_data = auto_detect_errors(resp.json())
+        code = exec_data[0]
+        message = exec_data[1]
+        details = "[" + code + "]" + message if code != "" else message
+
+        if code =="" and message == "":
             for obj in resp.json().values():
                 if isinstance(obj, dict):
-                    details = auto_detect_errors(obj)
-                    if details:
+                    exec_data = auto_detect_errors(obj)
+                    code = exec_data[0]
+                    message = exec_data[1]
+                    if code or message:
+                        details = "[" + code + "]" + message if code != "" else message
                         break
+
+        return cls(details=details, message=message, response=exc.response,
+                   request_id=exc.request_id, url=exc.url, method=exc.method,
+                   http_status=exc.http_status, cause=exc, code=code)
+
         # # Iterate over the nested objects to retrieve "message" attribute.
         # messages = [obj.get('message') for obj in resp.json().values()
         #             if isinstance(obj, dict)]
@@ -170,6 +188,6 @@ def from_exception(exc):
                 details_temp.append(detail)
         # Return joined string separated by colons.
         details = ': '.join(details_temp)
-    return cls(details=details, message=exc.message, response=exc.response,
-               request_id=exc.request_id, url=exc.url, method=exc.method,
-               http_status=exc.http_status, cause=exc)
+        return cls(details=details, message=exc.message, response=exc.response,
+                   request_id=exc.request_id, url=exc.url, method=exc.method,
+                   http_status=exc.http_status, cause=exc)

@@ -17,28 +17,31 @@ from openstack import utils
 
 
 class Resource(resource.Resource):
-
     _version_str = '/rds/v1/'
 
-    def _get_custom_url(self, session, url):
-        key = (self.service.service_type, self.service.interface)
+    _need_project_id = True
 
-        if key in session.endpoint_cache:
-            base_url = session.endpoint_cache[key]
-        else:
-            base_url = session.get_endpoint(
-                interface=self.service.interface,
-                service_type=self.service.service_type)
-
+    @classmethod
+    def _get_custom_url(cls, session, url):
+        key = (cls.service.service_type, cls.service.interface)
+        # if key in session.endpoint_cache:
+        #    base_url = session.endpoint_cache[key]
+        # else:
+        base_url = session.get_endpoint(
+            interface=cls.service.interface,
+            service_type=cls.service.service_type)
         # IAM only returns rds base url, as we need to hack
         # this to support both hw rds and openstack rds
         # provide custom url per resource type
-        custom_url = utils.urljoin(base_url, self._version_str,
-                                   session.get_project_id(), url)
+        custom_url = utils.urljoin(base_url, url)
         return custom_url
 
-    def _get_custom_override(self, endpoint_override):
-        return endpoint_override + self._version_str + "%(project_id)s"
+    @classmethod
+    def _get_custom_override(cls, endpoint_override):
+        if cls._need_project_id:
+            return endpoint_override
+        else:
+            return endpoint_override.rsplit('/', 1)[0]
 
     # overwrite resource2._prepare_request as maas requires header
     # to have Content-type
@@ -250,30 +253,27 @@ class Resource(resource.Resource):
         self._translate_response(response, has_body=has_body)
         return self
 
-    def delete(self, session):
-        """Delete the remote resource based on this instance.
+    def delete(self, session, has_body=False, params=None):
 
+        """Delete the remote resource based on this instance.
         :param session: The session to use for making this request.
         :type session: :class:`~openstack.session.Session`
-
         :return: This :class:`Resource` instance.
         :raises: :exc:`~openstack.exceptions.MethodNotSupported` if
                  :data:`Resource.allow_update` is not set to ``True``.
+
         """
+
         if not self.allow_delete:
             raise exceptions.MethodNotSupported(self, "delete")
-
         request = self._prepare_request()
-
         endpoint_override = self.service.get_endpoint_override()
         if endpoint_override is None:
             request.uri = self._get_custom_url(session, request.uri)
         else:
             endpoint_override = self._get_custom_override(endpoint_override)
-
         response = session.delete(request.uri, endpoint_filter=self.service,
                                   endpoint_override=endpoint_override,
-                                  headers={"Accept": ""})
-
+                                  headers=request.headers)
         self._translate_response(response, has_body=False)
         return self

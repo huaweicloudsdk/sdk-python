@@ -21,7 +21,7 @@ class RDSService(service_filter.ServiceFilter):
     def __init__(self, version=None):
         """Create a RDS service."""
         super(RDSService, self).__init__(
-            service_type='rds',
+            service_type='rdsv1',
             version=version,
             requires_project_id=True,
         )

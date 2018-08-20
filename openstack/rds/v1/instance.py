@@ -58,14 +58,13 @@ class Instance(_rdsresource.Resource):
     #: *Type: dict*
     securityGroup = resource.Body('securityGroup', type=dict)
     #: Flavor information
-    #: *Type: dict*
-    flavor = resource.Body('flavor', type=dict)
+    flavor = resource.Body('flavorRef')
     #: Volume information
     #: *Type: dict*
     volume = resource.Body('volume', type=dict)
     #: Data store information
     #: *Type: dict*
-    dataStoreInfo = resource.Body('dataStoreInfo', type=dict)
+    dataStoreInfo = resource.Body('datastore', type=dict)
     #: Backup Strategy
     #: *Type: dict*
     backupStrategy = resource.Body('backupStrategy', type=dict)
@@ -86,6 +85,8 @@ class Instance(_rdsresource.Resource):
         endpoint_override = self.service.get_endpoint_override()
         if endpoint_override is None:
             url = self._get_custom_url(session, url)
+        else:
+            endpoint_override = self._get_custom_override(endpoint_override)
         resp = session.post(url, endpoint_filter=self.service,
                             endpoint_override=endpoint_override,
                             json=body,
@@ -129,6 +130,8 @@ class InstanceParameter(_rdsresource.Resource):
         endpoint_override = cls.service.get_endpoint_override()
         if endpoint_override is None:
             uri = cls._get_custom_url(session, uri)
+        else:
+            endpoint_override = cls._get_custom_override(endpoint_override)
         resp = session.put(uri, endpoint_filter=cls.service,
                            endpoint_override=endpoint_override,
                            headers={"Accept": "application/json",
@@ -143,8 +146,11 @@ class InstanceParameter(_rdsresource.Resource):
         uri = utils.urljoin(cls.base_path % params, 'default')
         body = {}
         endpoint_override = cls.service.get_endpoint_override()
+
         if endpoint_override is None:
             uri = cls._get_custom_url(session, uri)
+        else:
+            endpoint_override = cls._get_custom_override(endpoint_override)
         resp = session.put(uri, endpoint_filter=cls.service,
                            endpoint_override=endpoint_override,
                            headers={"X-Language": "en-us"},

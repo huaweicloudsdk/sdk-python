@@ -114,3 +114,12 @@ def get_backup_policy(conn, i):
 
 def create_backup(conn, i):
     print(conn.rds.create_backup(i, "myname", "my desc"))
+
+
+def get_version(conn, version):
+    print(conn.rds.get_rds_version(version))
+
+
+def list_version(conn):
+    for v in conn.rds.list_rds_version():
+        print(v)
