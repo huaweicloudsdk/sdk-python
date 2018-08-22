@@ -15,26 +15,26 @@ from openstack.evs.v2 import volume_ext as _volume_ext
 
 
 class Proxy(proxy2.BaseProxy):
-    # def create_volume(self, **attrs):
-    #     """Create a new volume from attributes
-    #
-    #     :param dict attrs: Keyword arguments which will be used to create
-    #                        a :class:`~openstack.evs.v2.volume.Volume`,
-    #                        comprised of the properties on the Volume class.
-    #
-    #     :returns: The results of volume creation
-    #     :rtype: :class:`~openstack.evs.v2.volume.Volume`
-    #     """
-    #     return self._create(_volume.Vloume, **attrs)
-    #
-    # def resize_volume(self, volume_id, **data):
-    #     """
-    #     post method to modify volume size
-    #     :param volume_id: EVS volume_id
-    #     :param data:
-    #     :return: class:`~openstack.evs.v2.volume.ResizeVloume`
-    #     """
-    #     return self._create(_volume.ResizeVloume, volume_id=volume_id, **data)
+    def create_volume(self, **attrs):
+        """Create a new volume from attributes
+
+        :param dict attrs: Keyword arguments which will be used to create
+                           a :class:`~openstack.evs.v2.volume.Volume`,
+                           comprised of the properties on the Volume class.
+
+        :returns: The results of volume creation
+        :rtype: :class:`~openstack.evs.v2.volume.Volume`
+        """
+        return self._create(_volume.Vloume, **attrs)
+
+    def resize_volume(self, volume_id, **data):
+        """
+        post method to modify volume size
+        :param volume_id: EVS volume_id
+        :param data:
+        :return: class:`~openstack.evs.v2.volume.ResizeVloume`
+        """
+        return self._create(_volume.ResizeVloume, volume_id=volume_id, **data)
 
     def create_volume_ext(self, **attrs):
         """Create a new volume from attributes
