@@ -52,7 +52,7 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._get(_instance.Instance, instance)
 
-    def delete_instance(self, instance, ignore_missing=True):
+    def delete_instance(self, instance, ignore_missing=False):
         """Delete an instance
 
         :param instance: The value can be the ID of a instance or a object of
