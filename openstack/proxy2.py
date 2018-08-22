@@ -150,7 +150,7 @@ class BaseProxy(object):
                             (resource_type.__name__, value),
                     details=e.details, response=e.response,
                     request_id=e.request_id, url=e.url, method=e.method,
-                    http_status=e.http_status, cause=e.cause)
+                    http_status=e.http_status, cause=e.cause,code=e.code)
 
         return rv
 
@@ -228,7 +228,7 @@ class BaseProxy(object):
                         (resource_type.__name__, value),
                 details=e.details, response=e.response,
                 request_id=e.request_id, url=e.url, method=e.method,
-                http_status=e.http_status, cause=e.cause)
+                http_status=e.http_status, cause=e.cause,code=e.code)
 
     def _list(self, resource_type, value=None, paginated=False, **attrs):
         """List a resource
