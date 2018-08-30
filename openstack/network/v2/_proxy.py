@@ -20,15 +20,10 @@ from openstack.network.v2 import availability_zone
 from openstack.network.v2 import extension
 from openstack.network.v2 import flavor as _flavor
 from openstack.network.v2 import floating_ip as _floating_ip
-from openstack.network.v2 import health_monitor as _health_monitor
-from openstack.network.v2 import listener as _listener
-from openstack.network.v2 import load_balancer as _load_balancer
 from openstack.network.v2 import metering_label as _metering_label
 from openstack.network.v2 import metering_label_rule as _metering_label_rule
 from openstack.network.v2 import network as _network
 from openstack.network.v2 import network_ip_availability
-from openstack.network.v2 import pool as _pool
-from openstack.network.v2 import pool_member as _pool_member
 from openstack.network.v2 import port as _port
 from openstack.network.v2 import qos_bandwidth_limit_rule as \
     _qos_bandwidth_limit_rule
@@ -47,8 +42,6 @@ from openstack.network.v2 import segment as _segment
 from openstack.network.v2 import service_profile as _service_profile
 from openstack.network.v2 import service_provider as _service_provider
 from openstack.network.v2 import subnet as _subnet
-from openstack.network.v2 import subnet_pool as _subnet_pool
-from openstack.network.v2 import vpn_service as _vpn_service
 
 from openstack.network.v2 import loadbalancer
 from openstack.network.v2 import listener
@@ -589,284 +582,284 @@ class Proxy(proxy2.BaseProxy):
         """
         return self._update(_floating_ip.FloatingIP, floating_ip, **attrs)
 
-    def create_health_monitor(self, **attrs):
-        """Create a new health monitor from attributes
+    # def create_health_monitor(self, **attrs):
+    #     """Create a new health monitor from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #         a :class:`~openstack.network.v2.health_monitor.HealthMonitor`,
+    #         comprised of the properties on the HealthMonitor class.
+    #
+    #     :returns: The results of health monitor creation
+    #     :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #     """
+    #     return self._create(_health_monitor.HealthMonitor, **attrs)
+    #
+    # def delete_health_monitor(self, health_monitor, ignore_missing=True):
+    #     """Delete a health monitor
+    #
+    #     :param health_monitor: The value can be either the ID of a
+    #         health monitor or a
+    #         :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #         instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the health monitor does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent health monitor.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_health_monitor.HealthMonitor, health_monitor,
+    #                  ignore_missing=ignore_missing)
+    #
+    # def find_health_monitor(self, name_or_id, ignore_missing=True):
+    #     """Find a single health monitor
+    #
+    #     :param name_or_id: The name or ID of a health monitor.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.health_monitor.
+    #               HealthMonitor` or None
+    #     """
+    #     return self._find(_health_monitor.HealthMonitor,
+    #                       name_or_id, ignore_missing=ignore_missing)
 
-        :param dict attrs: Keyword arguments which will be used to create
-            a :class:`~openstack.network.v2.health_monitor.HealthMonitor`,
-            comprised of the properties on the HealthMonitor class.
+    # def get_health_monitor(self, health_monitor):
+    #     """Get a single health monitor
+    #
+    #     :param health_monitor: The value can be the ID of a health monitor or a
+    #            :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #            instance.
+    #
+    #     :returns: One
+    #               :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_health_monitor.HealthMonitor, health_monitor)
+    #
+    # def health_monitors(self, **query):
+    #     """Return a generator of health monitors
+    #
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned. Valid parameters are:
+    #
+    #         * ``delay``: the time in milliseconds between sending probes.
+    #         * ``expected_codes``: The expected HTTP codes for a pssing HTTP(S)
+    #                               monitor.
+    #         * ``http_method``: The HTTP method a monitor uses for requests.
+    #         * ``is_admin_state_up``: The administrative state of a health
+    #                                  monitor.
+    #         * ``max_retries``: The maximum consecutive health probe attempts.
+    #         * ``project_id``: The ID of the project this health monitor is
+    #                           associated with.
+    #         * ``timeout``: The maximum number of milliseconds for a monitor to
+    #                        wait for a connection to be established before it
+    #                        times out.
+    #         * ``type``: The type of probe sent by the load balancer for health
+    #                     check, which can be ``PING``, ``TCP``, ``HTTP`` or
+    #                     ``HTTPS``.
+    #         * ``url_path``: The path portion of a URI that will be probed.
+    #
+    #     :returns: A generator of health monitor objects
+    #     :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #     """
+    #     return self._list(_health_monitor.HealthMonitor, paginated=False,
+    #                       **query)
+    #
+    # def update_health_monitor(self, health_monitor, **attrs):
+    #     """Update a health monitor
+    #
+    #     :param health_monitor: Either the id of a health monitor or a
+    #                   :class:`~openstack.network.v2.health_monitor.
+    #                   HealthMonitor` instance.
+    #     :param dict attrs: The attributes to update on the health monitor
+    #                    represented by ``value``.
+    #
+    #     :returns: The updated health monitor
+    #     :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
+    #     """
+    #     return self._update(_health_monitor.HealthMonitor, health_monitor,
+    #                         **attrs)
 
-        :returns: The results of health monitor creation
-        :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-        """
-        return self._create(_health_monitor.HealthMonitor, **attrs)
+    # def create_listener(self, **attrs):
+    #     """Create a new listener from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #                        a :class:`~openstack.network.v2.listener.Listener`,
+    #                        comprised of the properties on the Listener class.
+    #
+    #     :returns: The results of listener creation
+    #     :rtype: :class:`~openstack.network.v2.listener.Listener`
+    #     """
+    #     return self._create(_listener.Listener, **attrs)
+    #
+    # def delete_listener(self, listener, ignore_missing=True):
+    #     """Delete a listener
+    #
+    #     :param listener: The value can be either the ID of a listner or a
+    #            :class:`~openstack.network.v2.listener.Listener` instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the listner does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent listener.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_listener.Listener, listener,
+    #                  ignore_missing=ignore_missing)
+    #
+    # def find_listener(self, name_or_id, ignore_missing=True):
+    #     """Find a single listener
+    #
+    #     :param name_or_id: The name or ID of a listener.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.listener.Listener` or None
+    #     """
+    #     return self._find(_listener.Listener, name_or_id,
+    #                       ignore_missing=ignore_missing)
+    #
+    # def get_listener(self, listener):
+    #     """Get a single listener
+    #
+    #     :param listener: The value can be the ID of a listener or a
+    #            :class:`~openstack.network.v2.listener.Listener`
+    #            instance.
+    #
+    #     :returns: One :class:`~openstack.network.v2.listener.Listener`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_listener.Listener, listener)
+    #
+    # def listeners(self, **query):
+    #     """Return a generator of listeners
+    #
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned. Valid parameters are:
+    #
+    #         * ``connection_limit``: The maximum number of connections
+    #                 permitted for the load-balancer.
+    #         * ``default_pool_id``: The ID of the default pool.
+    #         * ``default_tls_container_ref``: A reference to a container of TLS
+    #                 secret.
+    #         * ``description``: The description of a listener.
+    #         * ``is_admin_state_up``: The administrative state of the listener.
+    #         * ``name``: The name of a listener.
+    #         * ``project_id``: The ID of the project associated with a listener.
+    #         * ``protocol``: The protocol of the listener.
+    #         * ``protocol_port``: Port the listener will listen to.
+    #
+    #     :returns: A generator of listener objects
+    #     :rtype: :class:`~openstack.network.v2.listener.Listener`
+    #     """
+    #     return self._list(_listener.Listener, paginated=False, **query)
+    #
+    # def update_listener(self, listener, **attrs):
+    #     """Update a listener
+    #
+    #     :param listener: Either the id of a listener or a
+    #                   :class:`~openstack.network.v2.listener.Listener`
+    #                   instance.
+    #     :param dict attrs: The attributes to update on the listener
+    #                        represented by ``listener``.
+    #
+    #     :returns: The updated listener
+    #     :rtype: :class:`~openstack.network.v2.listener.Listener`
+    #     """
+    #     return self._update(_listener.Listener, listener, **attrs)
 
-    def delete_health_monitor(self, health_monitor, ignore_missing=True):
-        """Delete a health monitor
+    # def create_load_balancer(self, **attrs):
+    #     """Create a new load balancer from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #         a :class:`~openstack.network.v2.load_balancer.Zone`,
+    #         comprised of the properties on the Zone class.
+    #
+    #     :returns: The results of load balancer creation
+    #     :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
+    #     """
+    #     return self._create(_load_balancer.LoadBalancer, **attrs)
+    #
+    # def delete_load_balancer(self, load_balancer, ignore_missing=True):
+    #     """Delete a load balancer
+    #
+    #     :param load_balancer: The value can be the ID of a load balancer or a
+    #            :class:`~openstack.network.v2.load_balancer.Zone`
+    #            instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the load balancer does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent load balancer.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_load_balancer.LoadBalancer, load_balancer,
+    #                  ignore_missing=ignore_missing)
+    #
+    # def find_load_balancer(self, name_or_id, ignore_missing=True):
+    #     """Find a single load balancer
+    #
+    #     :param name_or_id: The name or ID of a load balancer.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.load_balancer.Zone`
+    #               or None
+    #     """
+    #     return self._find(_load_balancer.LoadBalancer, name_or_id,
+    #                       ignore_missing=ignore_missing)
+    #
+    # def get_load_balancer(self, load_balancer):
+    #     """Get a single load balancer
+    #
+    #     :param load_balancer: The value can be the ID of a load balancer or a
+    #            :class:`~openstack.network.v2.load_balancer.Zone`
+    #            instance.
+    #
+    #     :returns: One :class:`~openstack.network.v2.load_balancer.Zone`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_load_balancer.LoadBalancer, load_balancer)
+    #
+    # def load_balancers(self, **query):
+    #     """Return a generator of load balancers
+    #
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned.
+    #
+    #     :returns: A generator of load balancer objects
+    #     :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
+    #     """
+    #     return self._list(_load_balancer.LoadBalancer, paginated=False,
+    #                       **query)
 
-        :param health_monitor: The value can be either the ID of a
-            health monitor or a
-            :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-            instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the health monitor does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent health monitor.
-
-        :returns: ``None``
-        """
-        self._delete(_health_monitor.HealthMonitor, health_monitor,
-                     ignore_missing=ignore_missing)
-
-    def find_health_monitor(self, name_or_id, ignore_missing=True):
-        """Find a single health monitor
-
-        :param name_or_id: The name or ID of a health monitor.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.health_monitor.
-                  HealthMonitor` or None
-        """
-        return self._find(_health_monitor.HealthMonitor,
-                          name_or_id, ignore_missing=ignore_missing)
-
-    def get_health_monitor(self, health_monitor):
-        """Get a single health monitor
-
-        :param health_monitor: The value can be the ID of a health monitor or a
-               :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-               instance.
-
-        :returns: One
-                  :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        return self._get(_health_monitor.HealthMonitor, health_monitor)
-
-    def health_monitors(self, **query):
-        """Return a generator of health monitors
-
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned. Valid parameters are:
-
-            * ``delay``: the time in milliseconds between sending probes.
-            * ``expected_codes``: The expected HTTP codes for a pssing HTTP(S)
-                                  monitor.
-            * ``http_method``: The HTTP method a monitor uses for requests.
-            * ``is_admin_state_up``: The administrative state of a health
-                                     monitor.
-            * ``max_retries``: The maximum consecutive health probe attempts.
-            * ``project_id``: The ID of the project this health monitor is
-                              associated with.
-            * ``timeout``: The maximum number of milliseconds for a monitor to
-                           wait for a connection to be established before it
-                           times out.
-            * ``type``: The type of probe sent by the load balancer for health
-                        check, which can be ``PING``, ``TCP``, ``HTTP`` or
-                        ``HTTPS``.
-            * ``url_path``: The path portion of a URI that will be probed.
-
-        :returns: A generator of health monitor objects
-        :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-        """
-        return self._list(_health_monitor.HealthMonitor, paginated=False,
-                          **query)
-
-    def update_health_monitor(self, health_monitor, **attrs):
-        """Update a health monitor
-
-        :param health_monitor: Either the id of a health monitor or a
-                      :class:`~openstack.network.v2.health_monitor.
-                      HealthMonitor` instance.
-        :param dict attrs: The attributes to update on the health monitor
-                       represented by ``value``.
-
-        :returns: The updated health monitor
-        :rtype: :class:`~openstack.network.v2.health_monitor.HealthMonitor`
-        """
-        return self._update(_health_monitor.HealthMonitor, health_monitor,
-                            **attrs)
-
-    def create_listener(self, **attrs):
-        """Create a new listener from attributes
-
-        :param dict attrs: Keyword arguments which will be used to create
-                           a :class:`~openstack.network.v2.listener.Listener`,
-                           comprised of the properties on the Listener class.
-
-        :returns: The results of listener creation
-        :rtype: :class:`~openstack.network.v2.listener.Listener`
-        """
-        return self._create(_listener.Listener, **attrs)
-
-    def delete_listener(self, listener, ignore_missing=True):
-        """Delete a listener
-
-        :param listener: The value can be either the ID of a listner or a
-               :class:`~openstack.network.v2.listener.Listener` instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the listner does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent listener.
-
-        :returns: ``None``
-        """
-        self._delete(_listener.Listener, listener,
-                     ignore_missing=ignore_missing)
-
-    def find_listener(self, name_or_id, ignore_missing=True):
-        """Find a single listener
-
-        :param name_or_id: The name or ID of a listener.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.listener.Listener` or None
-        """
-        return self._find(_listener.Listener, name_or_id,
-                          ignore_missing=ignore_missing)
-
-    def get_listener(self, listener):
-        """Get a single listener
-
-        :param listener: The value can be the ID of a listener or a
-               :class:`~openstack.network.v2.listener.Listener`
-               instance.
-
-        :returns: One :class:`~openstack.network.v2.listener.Listener`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        return self._get(_listener.Listener, listener)
-
-    def listeners(self, **query):
-        """Return a generator of listeners
-
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned. Valid parameters are:
-
-            * ``connection_limit``: The maximum number of connections
-                    permitted for the load-balancer.
-            * ``default_pool_id``: The ID of the default pool.
-            * ``default_tls_container_ref``: A reference to a container of TLS
-                    secret.
-            * ``description``: The description of a listener.
-            * ``is_admin_state_up``: The administrative state of the listener.
-            * ``name``: The name of a listener.
-            * ``project_id``: The ID of the project associated with a listener.
-            * ``protocol``: The protocol of the listener.
-            * ``protocol_port``: Port the listener will listen to.
-
-        :returns: A generator of listener objects
-        :rtype: :class:`~openstack.network.v2.listener.Listener`
-        """
-        return self._list(_listener.Listener, paginated=False, **query)
-
-    def update_listener(self, listener, **attrs):
-        """Update a listener
-
-        :param listener: Either the id of a listener or a
-                      :class:`~openstack.network.v2.listener.Listener`
-                      instance.
-        :param dict attrs: The attributes to update on the listener
-                           represented by ``listener``.
-
-        :returns: The updated listener
-        :rtype: :class:`~openstack.network.v2.listener.Listener`
-        """
-        return self._update(_listener.Listener, listener, **attrs)
-
-    def create_load_balancer(self, **attrs):
-        """Create a new load balancer from attributes
-
-        :param dict attrs: Keyword arguments which will be used to create
-            a :class:`~openstack.network.v2.load_balancer.Zone`,
-            comprised of the properties on the Zone class.
-
-        :returns: The results of load balancer creation
-        :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
-        """
-        return self._create(_load_balancer.LoadBalancer, **attrs)
-
-    def delete_load_balancer(self, load_balancer, ignore_missing=True):
-        """Delete a load balancer
-
-        :param load_balancer: The value can be the ID of a load balancer or a
-               :class:`~openstack.network.v2.load_balancer.Zone`
-               instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the load balancer does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent load balancer.
-
-        :returns: ``None``
-        """
-        self._delete(_load_balancer.LoadBalancer, load_balancer,
-                     ignore_missing=ignore_missing)
-
-    def find_load_balancer(self, name_or_id, ignore_missing=True):
-        """Find a single load balancer
-
-        :param name_or_id: The name or ID of a load balancer.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.load_balancer.Zone`
-                  or None
-        """
-        return self._find(_load_balancer.LoadBalancer, name_or_id,
-                          ignore_missing=ignore_missing)
-
-    def get_load_balancer(self, load_balancer):
-        """Get a single load balancer
-
-        :param load_balancer: The value can be the ID of a load balancer or a
-               :class:`~openstack.network.v2.load_balancer.Zone`
-               instance.
-
-        :returns: One :class:`~openstack.network.v2.load_balancer.Zone`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        return self._get(_load_balancer.LoadBalancer, load_balancer)
-
-    def load_balancers(self, **query):
-        """Return a generator of load balancers
-
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned.
-
-        :returns: A generator of load balancer objects
-        :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
-        """
-        return self._list(_load_balancer.LoadBalancer, paginated=False,
-                          **query)
-
-    def update_load_balancer(self, load_balancer, **attrs):
-        """Update a load balancer
-
-        :param load_balancer: Either the id of a load balancer or a
-                      :class:`~openstack.network.v2.load_balancer.Zone`
-                      instance.
-        :param dict attrs: The attributes to update on the load balancer
-                           represented by ``load_balancer``.
-
-        :returns: The updated load balancer
-        :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
-        """
-        return self._update(_load_balancer.LoadBalancer, load_balancer,
-                            **attrs)
+    # def update_load_balancer(self, load_balancer, **attrs):
+    #     """Update a load balancer
+    #
+    #     :param load_balancer: Either the id of a load balancer or a
+    #                   :class:`~openstack.network.v2.load_balancer.Zone`
+    #                   instance.
+    #     :param dict attrs: The attributes to update on the load balancer
+    #                        represented by ``load_balancer``.
+    #
+    #     :returns: The updated load balancer
+    #     :rtype: :class:`~openstack.network.v2.load_balancer.LoadBalancer`
+    #     """
+    #     return self._update(_load_balancer.LoadBalancer, load_balancer,
+    #                         **attrs)
 
     def create_metering_label(self, **attrs):
         """Create a new metering label from attributes
@@ -1211,219 +1204,219 @@ class Proxy(proxy2.BaseProxy):
         return self._list(network_ip_availability.NetworkIPAvailability,
                           paginated=False, **query)
 
-    def create_pool(self, **attrs):
-        """Create a new pool from attributes
-
-        :param dict attrs: Keyword arguments which will be used to create
-                           a :class:`~openstack.network.v2.pool.Pool`,
-                           comprised of the properties on the Pool class.
-
-        :returns: The results of pool creation
-        :rtype: :class:`~openstack.network.v2.pool.Pool`
-        """
-        return self._create(_pool.Pool, **attrs)
-
-    def delete_pool(self, pool, ignore_missing=True):
-        """Delete a pool
-
-        :param pool: The value can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the pool does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent pool.
-
-        :returns: ``None``
-        """
-        self._delete(_pool.Pool, pool, ignore_missing=ignore_missing)
-
-    def find_pool(self, name_or_id, ignore_missing=True):
-        """Find a single pool
-
-        :param name_or_id: The name or ID of a pool.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.pool.Pool` or None
-        """
-        return self._find(_pool.Pool, name_or_id,
-                          ignore_missing=ignore_missing)
-
-    def get_pool(self, pool):
-        """Get a single pool
-
-        :param pool: The value can be the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance.
-
-        :returns: One :class:`~openstack.network.v2.pool.Pool`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        return self._get(_pool.Pool, pool)
-
-    def pools(self, **query):
-        """Return a generator of pools
-
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned. Valid parameters are:
-
-            * ``description``: The description for the pool.
-            * ``is_admin_state_up``: The administrative state of the pool.
-            * ``lb_algorithm``: The load-balancer algorithm used, which is one
-                of ``round-robin``, ``least-connections`` and so on.
-            * ``name``: The name of the node pool.
-            * ``project_id``: The ID of the project the pool is associated
-                with.
-            * ``protocol``: The protocol used by the pool, which is one of
-                ``TCP``, ``HTTP`` or ``HTTPS``.
-            * ``provider``: The name of the provider of the load balancer
-                service.
-            * ``subnet_id``: The subnet on which the members of the pool are
-                located.
-            * ``virtual_ip_id``: The ID of the virtual IP used.
-
-        :returns: A generator of pool objects
-        :rtype: :class:`~openstack.network.v2.pool.Pool`
-        """
-        return self._list(_pool.Pool, paginated=False, **query)
-
-    def update_pool(self, pool, **attrs):
-        """Update a pool
-
-        :param pool: Either the id of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance.
-        :param dict attrs: The attributes to update on the pool represented
-                           by ``pool``.
-
-        :returns: The updated pool
-        :rtype: :class:`~openstack.network.v2.pool.Pool`
-        """
-        return self._update(_pool.Pool, pool, **attrs)
-
-    def create_pool_member(self, pool, **attrs):
-        """Create a new pool member from attributes
-
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member will be created in.
-        :param dict attrs: Keyword arguments which will be used to create
-            a :class:`~openstack.network.v2.pool_member.PoolMember`,
-            comprised of the properties on the PoolMember class.
-
-        :returns: The results of pool member creation
-        :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        return self._create(_pool_member.PoolMember, pool_id=poolobj.id,
-                            **attrs)
-
-    def delete_pool_member(self, pool_member, pool, ignore_missing=True):
-        """Delete a pool member
-
-        :param pool_member:
-            The member can be either the ID of a pool member or a
-            :class:`~openstack.network.v2.pool_member.PoolMember` instance.
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member belongs to.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the pool member does not exist.
-                    When set to ``True``, no exception will be set when
-                    attempting to delete a nonexistent pool member.
-
-        :returns: ``None``
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        self._delete(_pool_member.PoolMember, pool_member,
-                     ignore_missing=ignore_missing, pool_id=poolobj.id)
-
-    def find_pool_member(self, name_or_id, pool, ignore_missing=True):
-        """Find a single pool member
-
-        :param str name_or_id: The name or ID of a pool member.
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member belongs to.
-        :param bool ignore_missing: When set to ``False``
-                    :class:`~openstack.exceptions.ResourceNotFound` will be
-                    raised when the resource does not exist.
-                    When set to ``True``, None will be returned when
-                    attempting to find a nonexistent resource.
-        :returns: One :class:`~openstack.network.v2.pool_member.PoolMember`
-                  or None
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        return self._find(_pool_member.PoolMember, name_or_id,
-                          ignore_missing=ignore_missing, pool_id=poolobj.id)
-
-    def get_pool_member(self, pool_member, pool):
-        """Get a single pool member
-
-        :param pool_member: The member can be the ID of a pool member or a
-                       :class:`~openstack.network.v2.pool_member.PoolMember`
-                       instance.
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member belongs to.
-
-        :returns: One :class:`~openstack.network.v2.pool_member.PoolMember`
-        :raises: :class:`~openstack.exceptions.ResourceNotFound`
-                 when no resource can be found.
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        return self._get(_pool_member.PoolMember, pool_member,
-                         pool_id=poolobj.id)
-
-    def pool_members(self, pool, **query):
-        """Return a generator of pool members
-
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member belongs to.
-        :param dict query: Optional query parameters to be sent to limit
-                           the resources being returned. Valid parameters are:
-
-            * ``address``: The IP address of the pool member.
-            * ``is_admin_state_up``: The administrative state of the pool
-                member.
-            * ``name``: Name of the pool member.
-            * ``project_id``: The ID of the project this pool member is
-                associated with.
-            * ``protocol_port``: The port on which the application is hosted.
-            * ``subnet_id``: Subnet ID in which to access this pool member.
-            * ``weight``: A positive integer value that indicates the relative
-                portion of traffic that this member should receive from the
-                pool.
-
-        :returns: A generator of pool member objects
-        :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        return self._list(_pool_member.PoolMember, paginated=False,
-                          pool_id=poolobj.id, **query)
-
-    def update_pool_member(self, pool_member, pool, **attrs):
-        """Update a pool member
-
-        :param pool_member: Either the ID of a pool member or a
-                       :class:`~openstack.network.v2.pool_member.PoolMember`
-                       instance.
-        :param pool: The pool can be either the ID of a pool or a
-                     :class:`~openstack.network.v2.pool.Pool` instance that
-                     the member belongs to.
-        :param dict attrs: The attributes to update on the pool member
-                           represented by ``pool_member``.
-
-        :returns: The updated pool member
-        :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
-        """
-        poolobj = self._get_resource(_pool.Pool, pool)
-        return self._update(_pool_member.PoolMember, pool_member,
-                            pool_id=poolobj.id, **attrs)
+    # def create_pool(self, **attrs):
+    #     """Create a new pool from attributes
+    #
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #                        a :class:`~openstack.network.v2.pool.Pool`,
+    #                        comprised of the properties on the Pool class.
+    #
+    #     :returns: The results of pool creation
+    #     :rtype: :class:`~openstack.network.v2.pool.Pool`
+    #     """
+    #     return self._create(_pool.Pool, **attrs)
+    #
+    # def delete_pool(self, pool, ignore_missing=True):
+    #     """Delete a pool
+    #
+    #     :param pool: The value can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the pool does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent pool.
+    #
+    #     :returns: ``None``
+    #     """
+    #     self._delete(_pool.Pool, pool, ignore_missing=ignore_missing)
+    #
+    # def find_pool(self, name_or_id, ignore_missing=True):
+    #     """Find a single pool
+    #
+    #     :param name_or_id: The name or ID of a pool.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.pool.Pool` or None
+    #     """
+    #     return self._find(_pool.Pool, name_or_id,
+    #                       ignore_missing=ignore_missing)
+    #
+    # def get_pool(self, pool):
+    #     """Get a single pool
+    #
+    #     :param pool: The value can be the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance.
+    #
+    #     :returns: One :class:`~openstack.network.v2.pool.Pool`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     return self._get(_pool.Pool, pool)
+    #
+    # def pools(self, **query):
+    #     """Return a generator of pools
+    #
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned. Valid parameters are:
+    #
+    #         * ``description``: The description for the pool.
+    #         * ``is_admin_state_up``: The administrative state of the pool.
+    #         * ``lb_algorithm``: The load-balancer algorithm used, which is one
+    #             of ``round-robin``, ``least-connections`` and so on.
+    #         * ``name``: The name of the node pool.
+    #         * ``project_id``: The ID of the project the pool is associated
+    #             with.
+    #         * ``protocol``: The protocol used by the pool, which is one of
+    #             ``TCP``, ``HTTP`` or ``HTTPS``.
+    #         * ``provider``: The name of the provider of the load balancer
+    #             service.
+    #         * ``subnet_id``: The subnet on which the members of the pool are
+    #             located.
+    #         * ``virtual_ip_id``: The ID of the virtual IP used.
+    #
+    #     :returns: A generator of pool objects
+    #     :rtype: :class:`~openstack.network.v2.pool.Pool`
+    #     """
+    #     return self._list(_pool.Pool, paginated=False, **query)
+    #
+    # def update_pool(self, pool, **attrs):
+    #     """Update a pool
+    #
+    #     :param pool: Either the id of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance.
+    #     :param dict attrs: The attributes to update on the pool represented
+    #                        by ``pool``.
+    #
+    #     :returns: The updated pool
+    #     :rtype: :class:`~openstack.network.v2.pool.Pool`
+    #     """
+    #     return self._update(_pool.Pool, pool, **attrs)
+    #
+    # def create_pool_member(self, pool, **attrs):
+    #     """Create a new pool member from attributes
+    #
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member will be created in.
+    #     :param dict attrs: Keyword arguments which will be used to create
+    #         a :class:`~openstack.network.v2.pool_member.PoolMember`,
+    #         comprised of the properties on the PoolMember class.
+    #
+    #     :returns: The results of pool member creation
+    #     :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     return self._create(_pool_member.PoolMember, pool_id=poolobj.id,
+    #                         **attrs)
+    #
+    # def delete_pool_member(self, pool_member, pool, ignore_missing=True):
+    #     """Delete a pool member
+    #
+    #     :param pool_member:
+    #         The member can be either the ID of a pool member or a
+    #         :class:`~openstack.network.v2.pool_member.PoolMember` instance.
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member belongs to.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the pool member does not exist.
+    #                 When set to ``True``, no exception will be set when
+    #                 attempting to delete a nonexistent pool member.
+    #
+    #     :returns: ``None``
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     self._delete(_pool_member.PoolMember, pool_member,
+    #                  ignore_missing=ignore_missing, pool_id=poolobj.id)
+    #
+    # def find_pool_member(self, name_or_id, pool, ignore_missing=True):
+    #     """Find a single pool member
+    #
+    #     :param str name_or_id: The name or ID of a pool member.
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member belongs to.
+    #     :param bool ignore_missing: When set to ``False``
+    #                 :class:`~openstack.exceptions.ResourceNotFound` will be
+    #                 raised when the resource does not exist.
+    #                 When set to ``True``, None will be returned when
+    #                 attempting to find a nonexistent resource.
+    #     :returns: One :class:`~openstack.network.v2.pool_member.PoolMember`
+    #               or None
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     return self._find(_pool_member.PoolMember, name_or_id,
+    #                       ignore_missing=ignore_missing, pool_id=poolobj.id)
+    #
+    # def get_pool_member(self, pool_member, pool):
+    #     """Get a single pool member
+    #
+    #     :param pool_member: The member can be the ID of a pool member or a
+    #                    :class:`~openstack.network.v2.pool_member.PoolMember`
+    #                    instance.
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member belongs to.
+    #
+    #     :returns: One :class:`~openstack.network.v2.pool_member.PoolMember`
+    #     :raises: :class:`~openstack.exceptions.ResourceNotFound`
+    #              when no resource can be found.
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     return self._get(_pool_member.PoolMember, pool_member,
+    #                      pool_id=poolobj.id)
+    #
+    # def pool_members(self, pool, **query):
+    #     """Return a generator of pool members
+    #
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member belongs to.
+    #     :param dict query: Optional query parameters to be sent to limit
+    #                        the resources being returned. Valid parameters are:
+    #
+    #         * ``address``: The IP address of the pool member.
+    #         * ``is_admin_state_up``: The administrative state of the pool
+    #             member.
+    #         * ``name``: Name of the pool member.
+    #         * ``project_id``: The ID of the project this pool member is
+    #             associated with.
+    #         * ``protocol_port``: The port on which the application is hosted.
+    #         * ``subnet_id``: Subnet ID in which to access this pool member.
+    #         * ``weight``: A positive integer value that indicates the relative
+    #             portion of traffic that this member should receive from the
+    #             pool.
+    #
+    #     :returns: A generator of pool member objects
+    #     :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     return self._list(_pool_member.PoolMember, paginated=False,
+    #                       pool_id=poolobj.id, **query)
+    #
+    # def update_pool_member(self, pool_member, pool, **attrs):
+    #     """Update a pool member
+    #
+    #     :param pool_member: Either the ID of a pool member or a
+    #                    :class:`~openstack.network.v2.pool_member.PoolMember`
+    #                    instance.
+    #     :param pool: The pool can be either the ID of a pool or a
+    #                  :class:`~openstack.network.v2.pool.Pool` instance that
+    #                  the member belongs to.
+    #     :param dict attrs: The attributes to update on the pool member
+    #                        represented by ``pool_member``.
+    #
+    #     :returns: The updated pool member
+    #     :rtype: :class:`~openstack.network.v2.pool_member.PoolMember`
+    #     """
+    #     poolobj = self._get_resource(_pool.Pool, pool)
+    #     return self._update(_pool_member.PoolMember, pool_member,
+    #                         pool_id=poolobj.id, **attrs)
 
     def create_port(self, **attrs):
         """Create a new port from attributes
