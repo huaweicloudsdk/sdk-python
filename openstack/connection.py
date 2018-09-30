@@ -9,6 +9,22 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+#
+#      Huawei has modified this source file.
+#     
+#         Copyright 2018 Huawei Technologies Co., Ltd.
+#         
+#         Licensed under the Apache License, Version 2.0 (the "License"); you may not
+#         use this file except in compliance with the License. You may obtain a copy of
+#         the License at
+#         
+#             http://www.apache.org/licenses/LICENSE-2.0
+#         
+#         Unless required by applicable law or agreed to in writing, software
+#         distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#         WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#         License for the specific language governing permissions and limitations under
+#         the License.
 
 """
 The :class:`~openstack.connection.Connection` class is the primary interface
@@ -210,6 +226,7 @@ class Connection(object):
             authentication arguments that are used by the authentication
             plugin.
         """
+
         self.profile = profile if profile else _profile.Profile()
         if session:
             # Make sure it is the right kind of session. A keystoneauth1
@@ -237,7 +254,6 @@ class Connection(object):
             # additional_user_agent = None, endpoint_file = '',
             # ak = None, sk = None, project_id = None,
             # region = None, domain = None
-            endpointfile = os.path.join(os.path.dirname(__file__), 'service_endpoint.json')
             self.session = aksession.ASKSession(self.profile,
                                                 verify = verify,
                                                 timeout=timeout,
@@ -247,8 +263,8 @@ class Connection(object):
                                                 sk = auth_args.get('sk',None),
                                                 project_id = auth_args.get('project_id',None),
                                                 region= auth_args.get("region",None),
-                                                domain = auth_args.get('domain',None),
-                                                endpoint_file= endpointfile
+                                                domain = auth_args.get('domain',None)
+                                                #endpoint_file= endpointfile
                                                 )
         else:
             self.authenticator = self._create_authenticator(authenticator,
@@ -268,6 +284,7 @@ class Connection(object):
         loader = ksa_loader.get_plugin_loader(auth_plugin)
         load_args = {}
         for opt in loader.get_options():
+
             if args.get(opt.dest):
                 load_args[opt.dest] = args[opt.dest]
         return loader.load_from_options(**load_args)

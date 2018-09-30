@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: openstacksdk
-Version: 1.0.5.dev364
+Version: 1.0.6
 Summary: An SDK for building applications to work with OpenStack
 Home-page: http://developer.openstack.org/sdks/python/openstacksdk/
 Author: OpenStack

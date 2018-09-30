@@ -1,4 +1,4 @@
-{
+endpoint = {
   "ANTI_DDOS": {
     "public": "https://antiddos.%(region)s.%(domain)s/v1/%(project_id)s"
   },
